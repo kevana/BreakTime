@@ -7,24 +7,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 
-
-public class HomeActivity extends Activity {
+public class StudyTimerActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_study_timer);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.study_timer, menu);
         return true;
     }
 
@@ -38,11 +34,6 @@ public class HomeActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void startStudying(View view) {
-        Intent intent = new Intent(this, StudyTimerActivity.class);
-        startActivity(intent);
     }
 
     public void openSettings(View view) {
