@@ -8,19 +8,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 
-public class StudyTimerActivity extends Activity {
+public class ChooseBreakActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_study_timer);
+        setContentView(R.layout.activity_choose_break);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.study_timer, menu);
+        getMenuInflater().inflate(R.menu.choose_break, menu);
         return true;
     }
 
@@ -41,8 +41,8 @@ public class StudyTimerActivity extends Activity {
         startActivity(intent);
     }
 
-    public void finishSession(View view) {
-        Intent intent = new Intent(this, ChooseBreakActivity.class);
+    public void gotoWork(View view) {
+        Intent intent = new Intent(this, BackToWorkActivity.class);
         startActivity(intent);
     }
 }

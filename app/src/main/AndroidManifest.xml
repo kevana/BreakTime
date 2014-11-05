@@ -39,6 +39,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.breaktime.HomeActivity" />
         </activity>
+        <activity
+            android:name=".ChooseBreakActivity"
+            android:label="@string/title_activity_choose_break" >
+        </activity>
+        <activity
+            android:name=".BackToWorkActivity"
+            android:label="@string/title_activity_back_to_work" >
+        </activity>
     </application>
 
 </manifest>
