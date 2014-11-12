@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.breaktime"
-    android:versionCode="3"
-    android:versionName="0.3">>
-
+    package="com.breaktime">
+    >
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".HomeActivity"
-            android:label="@string/app_name" >
+            android:name="com.breaktime.HomeActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,28 +24,28 @@
             android:value="@string/crashlytics_key" />
 
         <activity
-            android:name=".StudyTimerActivity"
+            android:name="com.breaktime.StudyTimerActivity"
             android:label="@string/title_activity_study_timer"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName="com.breaktime.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.breaktime.HomeActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.breaktime.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName="com.breaktime.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.breaktime.HomeActivity" />
         </activity>
         <activity
-            android:name=".ChooseBreakActivity"
-            android:label="@string/title_activity_choose_break" >
+            android:name="com.breaktime.ChooseBreakActivity"
+            android:label="@string/title_activity_choose_break">
         </activity>
         <activity
-            android:name=".BackToWorkActivity"
-            android:label="@string/title_activity_back_to_work" >
+            android:name="com.breaktime.BackToWorkActivity"
+            android:label="@string/title_activity_back_to_work">
         </activity>
     </application>
 
