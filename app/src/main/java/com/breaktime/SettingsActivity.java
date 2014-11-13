@@ -4,14 +4,19 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class SettingsActivity extends Activity {
+    private TextView studyTimeText;
+    private long studyTime = 30000L;
+    private long breakTime = 5000L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        studyTimeText.setText(String.format("%d", studyTime/1000));
     }
 
 
@@ -33,4 +38,30 @@ public class SettingsActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO: Make all time increments into minutes, instead of seconds
+    private void incrementStudyTime()
+    {
+        studyTime += 5000L;
+        studyTimeText.setText(String.format("%d", studyTime/1000));
+    }
+    private void decrementStudyTime() {
+        studyTime -= 5000L;
+        studyTimeText.setText(String.format("%d", studyTime/1000));
+    }
+    private void incrementBreakTime()
+    {
+        breakTime += 1000L;
+    }
+    private void decrementBreakTime() {
+        breakTime -= 1000L;
+    }
+
+    public long getStudyTime() {
+        return studyTime;
+    }
+    public long getBreakTime() {
+        return breakTime;
+    }
+
 }

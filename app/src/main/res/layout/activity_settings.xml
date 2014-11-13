@@ -14,4 +14,33 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
+    <ImageButton
+        android:id="@+id/plusStudy"
+        android:scaleType="fitCenter"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="50dp"
+        android:background="@android:color/transparent"
+        android:onClick="incrementStudyTime"
+        android:src="@drawable/plus" />
+    <TextView
+        android:id="@+id/studyTimeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="init"
+        android:textSize="30dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@id/plusStudy"
+        android:layout_marginTop="10dp"/>
+    <ImageButton
+        android:id="@+id/minusStudy"
+        android:scaleType="fitCenter"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/studyTimeText"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:onClick="decrementStudyTime"
+        android:src="@drawable/minus" />
 </RelativeLayout>
