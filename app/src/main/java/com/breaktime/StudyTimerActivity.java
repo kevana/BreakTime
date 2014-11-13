@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,8 +37,10 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
         // TODO: Set timer based on settings
-        studyTimer = new StudyTimer(30000, 1000);
+        remainingMillis = 30000L;
+        studyTimer = new StudyTimer(remainingMillis, 1000);
         studyTimer.start();
+        Log.v("StudyTimerActivity", "StudyTimer Started");
         timerRunning = true;
     }
 
@@ -67,10 +70,14 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         if (distance > 1.0 && timerRunning) {
             // Stop timer
             studyTimer.cancel();
+            timerRunning = false;
+            Log.v("StudyTimerActivity", "StudyTimer Cancelled");
         } else if (distance < 1.0 && !timerRunning) {
             // Start timer
             studyTimer = new StudyTimer(remainingMillis, 1000);
             studyTimer.start();
+            timerRunning = true;
+            Log.v("StudyTimerActivity", "New StudyTimer Started");
         }
     }
 
@@ -110,6 +117,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         @Override
         public void onTick(long millisUntilFinished) {
             timerRunning = true;
+            Log.v("StudyTimerActivity", "StudyTimer Ticked");
             remainingMillis = millisUntilFinished;
             // TODO: convert to minutes after testing
             long seconds = millisUntilFinished / 1000;
