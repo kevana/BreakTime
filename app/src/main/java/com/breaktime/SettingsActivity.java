@@ -1,21 +1,42 @@
 package com.breaktime;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import java.util.prefs.Preferences;
 
 
 public class SettingsActivity extends Activity {
     private TextView studyTimeText;
-    private long studyTime = 30000L;
-    private long breakTime = 5000L;
+    private long studyTime;
+    private long breakTime;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        settings = getPreferences(MODE_PRIVATE);
+        studyTime = settings.getLong(PrefID.STUDY_TIME, -1);
+        breakTime = settings.getLong(PrefID.BREAK_TIME, -1);
+        if(studyTime < 0){
+            studyTime = 30000L;
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.STUDY_TIME, studyTime);
+            ed.commit();
+        }
+        if(breakTime < 0){
+            breakTime = 5000L;
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.BREAK_TIME, breakTime);
+            ed.commit();
+        }
+        studyTimeText = (TextView) findViewById(R.id.studyTimeText);
         studyTimeText.setText(String.format("%d", studyTime/1000));
     }
 
@@ -39,16 +60,38 @@ public class SettingsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO: Make all time increments into minutes, instead of seconds
-    private void incrementStudyTime()
+    @Override
+    protected void onPause()
     {
-        studyTime += 5000L;
-        studyTimeText.setText(String.format("%d", studyTime/1000));
+        super.onPause();
+
+        SharedPreferences.Editor ed = settings.edit();
+        ed.putLong(PrefID.STUDY_TIME, studyTime);
+        ed.putLong(PrefID.BREAK_TIME, breakTime);
+        ed.commit();
     }
-    private void decrementStudyTime() {
-        studyTime -= 5000L;
-        studyTimeText.setText(String.format("%d", studyTime/1000));
+
+    //TODO: Make all time increments into minutes, instead of seconds
+    public void incrementStudyTime(View v)
+    {
+        if(studyTime >= 100000L){
+            return; //TODO Feedback?
+        }
+        else {
+            studyTime += 5000L;
+            studyTimeText.setText(String.format("%d", studyTime / 1000));
+        }
     }
+    public void decrementStudyTime(View v) {
+        if(studyTime <= 10000L){
+            return; //TODO Feedback?
+        }
+        else {
+            studyTime -= 5000L;
+            studyTimeText.setText(String.format("%d", studyTime / 1000));
+        }
+    }
+
     private void incrementBreakTime()
     {
         breakTime += 1000L;
