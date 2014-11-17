@@ -4,5 +4,13 @@
     <string name="app_name">BreakTime</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="home_activity_call_to_action">Start Studying!</string>
+    <string name="home_activity_help">Getting Started</string>
+    <string name="title_activity_study_timer">StudyTimerActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_choose_break">ChooseBreakActivity</string>
+    <string name="activity_choose_break_list_message">Choose a Break Activity</string>
+    <string name="title_activity_back_to_work">BackToWorkActivity</string>
+    <string name="activity_back_to_work_title">Back to Work</string>
 
 </resources>
