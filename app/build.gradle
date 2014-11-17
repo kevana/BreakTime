@@ -16,7 +16,7 @@ repositories {
 
 
 android {
-    compileSdkVersion 20
+    compileSdkVersion 21
     buildToolsVersion '20.0.0'
     defaultConfig {
         applicationId 'com.breaktime'

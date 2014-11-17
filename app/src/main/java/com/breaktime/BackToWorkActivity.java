@@ -14,6 +14,7 @@ public class BackToWorkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_back_to_work);
+        stopService(new Intent(this, BreakTimerService.class));
     }
 
 
@@ -35,6 +36,8 @@ public class BackToWorkActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     public void openSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);

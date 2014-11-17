@@ -2,7 +2,9 @@ package com.breaktime;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +44,9 @@ public class HomeActivity extends Activity {
     }
 
     public void startStudying(View view) {
+        SharedPreferences.Editor ed = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
+        ed.commit();
         Intent intent = new Intent(this, StudyTimerActivity.class);
         startActivity(intent);
     }
