@@ -11,14 +11,16 @@
     tools:context="com.breaktime.StudyTimerActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/FinishButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/imageButton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="65dp"
         android:onClick="finishSession"
-        android:text="Finish session Early" />
+        android:text="Finish Session Early"
+        android:textColor="@color/whiteFull"
+        />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -36,18 +38,34 @@
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button"
+
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="81dp"
+
+        android:layout_marginTop="80dp"
         android:width="175sp"
-        android:height="175sp"
-        android:gravity="center"
+        android:height="170sp"
+        android:gravity="top"
         android:text="30"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textIsSelectable="false"
         android:textSize="150sp"
         android:textStyle="bold"
-        android:typeface="sans" />
+        android:typeface="sans"
+        android:textColor="@color/whiteFull"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timerTextView"
+        android:layout_centerHorizontal="true"
+        android:width="175sp"
+        android:height="40sp"
+        android:gravity="center"
+        android:text="minutes left!"
+        android:textSize="29sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:textColor="@color/whiteFull"
+        />
 
 </RelativeLayout>

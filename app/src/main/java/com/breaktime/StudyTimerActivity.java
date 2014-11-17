@@ -21,8 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.List;
+import android.os.Handler;
 
 
 public class StudyTimerActivity extends Activity implements SensorEventListener {
@@ -71,6 +70,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         if(remainingMillis < 0) {
             remainingMillis = settings.getLong(PrefID.STUDY_TIME, 12000L);
         }
+        Log.v("StudyTimerActivity", "millis:"+remainingMillis);
         long seconds = remainingMillis / 1000;
         timerTextView.setText(String.format("%d", seconds));
 //        Log.v("StudyTimerActivity", "millis:"+remainingMillis);
@@ -124,7 +124,14 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         // Register a listener for the sensor.
         super.onResume();
         sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-        audioManager.setRingerMode(originalAudioLevel);
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                audioManager.setRingerMode(originalAudioLevel);
+            }
+        }, 2000);
     }
 
     @Override
@@ -135,6 +142,10 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         if(studyTimer != null) {
             studyTimer.cleanup();
         }
+        SharedPreferences.Editor ed = settings.edit();
+        ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
+        ed.commit();
+        Log.v("studytimer", "study time remaining in prefs:"+settings.getLong(PrefID.STUDY_TIME_REMAINING, -5));
     }
 
     public void openSettings(View view) {
@@ -156,8 +167,16 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
             wl.acquire();
             vibrator.vibrate(new long[] {100L, 500L, 300L, 1000L}, -1);
 
+            //Delay running this until after vibration is done
             originalAudioLevel = audioManager.getRingerMode();
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                }
+            }, 2000);
 
             timerRunning = true;
         }
@@ -175,6 +194,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         @Override
         public void onFinish() {
             this.cleanup();
+            studyTimerActivity.finish();
             Intent intent = new Intent(studyTimerActivity, ChooseBreakActivity.class);
             startActivity(intent);
         }
@@ -185,17 +205,19 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
                 wl.release();
             }
             timerRunning = false;
-            audioManager.setRingerMode(originalAudioLevel);
-            if(remainingMillis > 0){
-                SharedPreferences.Editor ed = settings.edit();
-                ed.putLong(PrefID.STUDY_TIME_REMAINING, remainingMillis);
-                ed.commit();
-            }else
-            {
-                SharedPreferences.Editor ed = settings.edit();
-                ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
-                ed.commit();
-            }
+            Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    audioManager.setRingerMode(originalAudioLevel);
+                }
+            }, 2000);
+
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.STUDY_TIME_REMAINING, remainingMillis);
+            ed.commit();
+
             this.cancel();
         }
     }
