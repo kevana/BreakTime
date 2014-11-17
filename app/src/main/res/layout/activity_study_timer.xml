@@ -22,11 +22,12 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:scaleType="fitCenter"
         android:background="@android:color/transparent"
         android:onClick="openSettings"
         android:src="@drawable/settings48" />

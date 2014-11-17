@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#ffefeadd</color>
+    <!-- http://www.google.com/design/spec/style/color.html#color-color-palette -->
+
+    <color name="background">#FFD32F2F</color>
+
+    <color name="red500">#FFF44336</color>
+    <color name="red100">#FFFFCDD2</color>
+    <color name="red700">#FFD32F2F</color>
+
+    <color name="whiteFull">#FFFFFFFF</color>
 </resources>
