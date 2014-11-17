@@ -3,12 +3,14 @@ package com.breaktime;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,9 +37,14 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        SharedPreferences settings = getSharedPreferences(PrefID.APP_PREF, MODE_PRIVATE);
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Log.v("StudyTimerActivity", "Preferences retrieved: "+settings.toString());
 
         // TODO: Set timer based on settings
-        remainingMillis = 30000L;
+
+        remainingMillis = settings.getLong(PrefID.STUDY_TIME, 12000L);
+        Log.v("StudyTimerActivity", "millis:"+remainingMillis);
         studyTimer = new StudyTimer(remainingMillis, 1000);
         studyTimer.start();
         Log.v("StudyTimerActivity", "StudyTimer Started");
@@ -112,6 +119,8 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
     public class StudyTimer extends CountDownTimer {
         public StudyTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
+            long seconds = millisInFuture / 1000;
+            timerTextView.setText(String.format("%d", seconds));
         }
 
         @Override

@@ -3,6 +3,8 @@ package com.breaktime;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +23,8 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        settings = getPreferences(MODE_PRIVATE);
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Log.v("SettingsActivity", "Preferences retrieved: " + settings.toString());
         studyTime = settings.getLong(PrefID.STUDY_TIME, -1);
         breakTime = settings.getLong(PrefID.BREAK_TIME, -1);
         if(studyTime < 0){
