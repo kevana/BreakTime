@@ -10,21 +10,17 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 public class BreakTimerService extends Service {
 
-    private BreakTimerService breakTimerService;
+    long remainingMillis;
     private WindowManager windowManager;
     private TextView chatHeadText;
-    private SharedPreferences settings;
-    private BreakTimer breakTimer;
-
-    public BreakTimerService() {
-        breakTimerService = this;
-    }
+    private WindowManager.LayoutParams params;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -35,9 +31,7 @@ public class BreakTimerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        breakTimerService = this;
-        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         chatHeadText = new TextView(this);
         // TODO: Change to TextView with timer?
@@ -47,11 +41,8 @@ public class BreakTimerService extends Service {
         chatHeadText.setGravity(Gravity.CENTER);
 
         remainingMillis = settings.getLong(PrefID.BREAK_TIME, -1);
-        if (remainingMillis < 0) {
 
-        }
-
-        breakTimer = new BreakTimer(remainingMillis, 1000);
+        BreakTimer breakTimer = new BreakTimer(remainingMillis, 1000);
         breakTimer.start();
         long seconds = remainingMillis / 1000;
         chatHeadText.setText(String.format("%d", seconds));
@@ -59,7 +50,7 @@ public class BreakTimerService extends Service {
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+        params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
@@ -81,6 +72,35 @@ public class BreakTimerService extends Service {
                 }
         );
 
+        chatHeadText.setOnTouchListener(new View.OnTouchListener() {
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            // From http://www.piwai.info/chatheads-basics
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = params.x;
+                        initialY = params.y;
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        params.x = initialX + (int) (event.getRawX() - initialTouchX);
+                        params.y = initialY + (int) (event.getRawY() - initialTouchY);
+                        windowManager.updateViewLayout(chatHeadText, params);
+                        return true;
+                }
+                return false;
+            }
+        });
+
+
         windowManager.addView(chatHeadText, params);
     }
 
@@ -90,33 +110,16 @@ public class BreakTimerService extends Service {
         if (chatHeadText != null) windowManager.removeView(chatHeadText);
     }
 
-    long remainingMillis;
-
     public class BreakTimer extends CountDownTimer {
 
         public BreakTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
             long seconds = millisInFuture / 1000;
             chatHeadText.setText(String.format("%d", seconds));
-            //vibrator.vibrate(new long[] {100L, 500L, 300L, 1000L}, -1);
-
-            //Delay running this until after vibration is done
-            //originalAudioLevel = audioManager.getRingerMode();
-            Handler h = new Handler();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    //        audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                }
-            }, 2000);
-
-            //timerRunning = true;
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-            //timerRunning = true;
             Log.v("BreakTimerService", "BreakTimer Ticked");
             remainingMillis = millisUntilFinished;
             // TODO: convert to minutes after testing
@@ -134,20 +137,6 @@ public class BreakTimerService extends Service {
         }
 
         public void cleanup() {
-            //timerRunning = false;
-            Handler h = new Handler();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    //        audioManager.setRingerMode(originalAudioLevel);
-                }
-            }, 2000);
-/*
-            SharedPreferences.Editor ed = settings.edit();
-            ed.putLong(PrefID.STUDY_TIME_REMAINING, remainingMillis);
-            ed.commit();
-*/
             this.cancel();
         }
     }

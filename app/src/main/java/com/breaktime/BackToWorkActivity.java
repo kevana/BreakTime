@@ -1,8 +1,10 @@
 package com.breaktime;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,12 +13,18 @@ import android.widget.Toast;
 
 public class BackToWorkActivity extends Activity {
 
+    private Vibrator vibrator;
+
     boolean leavingByButtonPush = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_back_to_work);
         stopService(new Intent(this, BreakTimerService.class));
+
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {100L, 200L,100L, 200L,100L, 200L};
+        vibrator.vibrate(pattern, -1);
     }
 
 

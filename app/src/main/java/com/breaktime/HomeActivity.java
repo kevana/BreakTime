@@ -60,9 +60,10 @@ public class HomeActivity extends Activity {
     }
 
     public void startStudying(View view) {
-        SharedPreferences.Editor ed = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        SharedPreferences.Editor ed = PreferenceManager.
+                getDefaultSharedPreferences(getApplicationContext()).edit();
         ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
-        ed.commit();
+        ed.apply();
         Intent intent = new Intent(this, StudyTimerActivity.class);
         startActivity(intent);
     }
