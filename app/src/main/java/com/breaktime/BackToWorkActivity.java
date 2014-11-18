@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 public class BackToWorkActivity extends Activity {
 
+    boolean leavingByButtonPush = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +39,24 @@ public class BackToWorkActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStop(){
+        if(!leavingByButtonPush) {
+            snooze(getWindow().getDecorView().findViewById(R.id.imageButton2));
+        }
+        super.onStop();
+
+    }
+
 
     public void openSettings(View view) {
+        leavingByButtonPush = true;
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
     public void startStudying(View view) {
+        leavingByButtonPush = true;
         Intent intent = new Intent(this, StudyTimerActivity.class);
         startActivity(intent);
     }
