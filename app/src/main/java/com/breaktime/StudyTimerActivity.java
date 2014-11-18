@@ -111,6 +111,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         } else if (distance < 1.0 && !timerRunning && hasWindowFocus()) {
             // Start timer
             studyTimer = new StudyTimer(remainingMillis, 1000);
+            vibrator.vibrate(new long[] {100L, 250L, 300L, 350L}, -1);
             studyTimer.start();
             Log.v("StudyTimerActivity", "New StudyTimer Started");
         }
@@ -129,7 +130,6 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 audioManager.setRingerMode(originalAudioLevel);
             }
         }, 2000);
@@ -155,6 +155,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
     }
 
     public void finishSession(View view) {
+        studyTimerActivity.finish();
         Intent intent = new Intent(this, ChooseBreakActivity.class);
         startActivity(intent);
     }
@@ -166,7 +167,6 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
             long seconds = millisInFuture / 1000;
             timerTextView.setText(String.format("%d", seconds));
             wl.acquire();
-            vibrator.vibrate(new long[] {100L, 500L, 300L, 1000L}, -1);
 
             //Delay running this until after vibration is done
             originalAudioLevel = audioManager.getRingerMode();
@@ -174,7 +174,6 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
             h.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                 }
             }, 2000);

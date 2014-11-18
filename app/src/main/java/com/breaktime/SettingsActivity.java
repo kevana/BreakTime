@@ -98,7 +98,7 @@ public class SettingsActivity extends Activity {
         }
     }
 
-    private void incrementBreakTime()
+    public void incrementBreakTime(View v)
     {
         if(breakTime >= 10000L)
         {
@@ -108,7 +108,7 @@ public class SettingsActivity extends Activity {
         breakTime += 1000L;
         breakTimeText.setText(String.format("%d", breakTime / 1000));
     }
-    private void decrementBreakTime() {
+    public void decrementBreakTime(View v) {
 
         if(breakTime <= 1000L)
         {
