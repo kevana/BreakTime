@@ -21,6 +21,22 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_home);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        long studyTime = settings.getLong(PrefID.STUDY_TIME, -1);
+        long breakTime = settings.getLong(PrefID.BREAK_TIME, -1);
+        if(studyTime < 0){
+            studyTime = 30000L;
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.STUDY_TIME, studyTime);
+            ed.commit();
+        }
+        if(breakTime < 0){
+            breakTime = 5000L;
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.BREAK_TIME, breakTime);
+            ed.commit();
+        }
     }
 
 

@@ -48,4 +48,13 @@ public class BackToWorkActivity extends Activity {
         Intent intent = new Intent(this, StudyTimerActivity.class);
         startActivity(intent);
     }
+
+    public void continueBreak(View view)
+    {
+        startService(new Intent(this, BreakTimerService.class));
+        Intent homeIntent= new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+    }
 }
