@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 
 public class BackToWorkActivity extends Activity {
@@ -38,7 +39,6 @@ public class BackToWorkActivity extends Activity {
     }
 
 
-
     public void openSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
@@ -49,10 +49,11 @@ public class BackToWorkActivity extends Activity {
         startActivity(intent);
     }
 
-    public void continueBreak(View view)
-    {
+    public void snooze(View view) {
+        Toast.makeText(getApplicationContext(), view.getContentDescription(),
+                Toast.LENGTH_SHORT).show();
         startService(new Intent(this, BreakTimerService.class));
-        Intent homeIntent= new Intent(Intent.ACTION_MAIN);
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);

@@ -42,7 +42,7 @@
         android:layout_alignTop="@+id/imageButton"
         android:layout_toRightOf="@+id/textView"
         android:contentDescription="Snooze Button"
-        android:onClick="continueBreak"
+        android:onClick="snooze"
         />
 
     <ImageButton
