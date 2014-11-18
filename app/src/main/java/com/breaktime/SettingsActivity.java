@@ -1,4 +1,6 @@
 package com.breaktime;
+import java.util.List;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -9,8 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 
-import java.util.prefs.Preferences;
+
+
 
 
 public class SettingsActivity extends Activity {
@@ -18,7 +28,8 @@ public class SettingsActivity extends Activity {
     private long studyTime;
     private long breakTime;
     private SharedPreferences settings;
-
+    final Context context = this;
+    private static final String TAG = "AppTest";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +106,70 @@ public class SettingsActivity extends Activity {
         }
     }
 
+    public void pullAppList(View v) {
+        // get apps in phone
+        final PackageManager pm = getPackageManager();
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        List<String> items = new ArrayList<String>();
+        List<Integer> icons = new ArrayList<Integer>();
+        int i = 0;
+        // Add all apps to list
+        for (ApplicationInfo packageInfo : packages) {
+            if (packageInfo.icon > 0 &&  pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
+                Log.d(TAG, "Installed package :" + packageInfo.packageName);
+                Log.d(TAG, "Icon : " + packageInfo.icon);
+                Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
+                Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
+                icons.add(packageInfo.icon);
+                items.add(packageInfo.packageName);
+            }
+            i++;
+        }
+        final ListAdapter adapter = new ArrayAdapterWithIcon(context, items, icons);
+
+        // Build alert dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set title
+        alertDialogBuilder.setTitle("Pick an App to add to your activities!");
+        alertDialogBuilder.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialogBuilder.setAdapter(adapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                                SettingsActivity.this);
+                        builderInner.setTitle("Your Selected Item is");
+                        builderInner.setPositiveButton("Ok",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(
+                                            DialogInterface dialog,
+                                            int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        builderInner.show();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
     private void incrementBreakTime()
     {
         breakTime += 1000L;
