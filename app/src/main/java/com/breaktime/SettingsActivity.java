@@ -15,6 +15,7 @@ import java.util.prefs.Preferences;
 
 public class SettingsActivity extends Activity {
     private TextView studyTimeText;
+    private TextView breakTimeText;
     private long studyTime;
     private long breakTime;
     private SharedPreferences settings;
@@ -41,6 +42,8 @@ public class SettingsActivity extends Activity {
         }
         studyTimeText = (TextView) findViewById(R.id.studyTimeText);
         studyTimeText.setText(String.format("%d", studyTime/1000));
+        breakTimeText = (TextView) findViewById(R.id.breakTimeText);
+        breakTimeText.setText(String.format("%d", breakTime/1000));
     }
 
 
@@ -95,19 +98,25 @@ public class SettingsActivity extends Activity {
         }
     }
 
-    private void incrementBreakTime()
+    public void incrementBreakTime(View v)
     {
-        breakTime += 1000L;
-    }
-    private void decrementBreakTime() {
-        breakTime -= 1000L;
-    }
+        if(breakTime >= 10000L)
+        {
+            return;
+        }
 
-    public long getStudyTime() {
-        return studyTime;
+        breakTime += 1000L;
+        breakTimeText.setText(String.format("%d", breakTime / 1000));
     }
-    public long getBreakTime() {
-        return breakTime;
+    public void decrementBreakTime(View v) {
+
+        if(breakTime <= 1000L)
+        {
+            return;
+        }
+
+        breakTime -= 1000L;
+        breakTimeText.setText(String.format("%d", breakTime / 1000));
     }
 
 }
