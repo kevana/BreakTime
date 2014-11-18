@@ -23,7 +23,7 @@ public class BackToWorkActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_back_to_work);
-        stopService(new Intent(this, BreakTimerService.class));
+
 
         //Set up ScreenReceiver.
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
@@ -38,8 +38,16 @@ public class BackToWorkActivity extends Activity {
     }
 
     @Override
+    public void onResume(){
+        stopService(new Intent(this, BreakTimerService.class));
+        super.onResume();
+    }
+
+    @Override
     public void onPause(){
-        if(!leavingByButtonPush && ScreenReceiver.wasScreenOn) {
+        if(!leavingByButtonPush
+                && ScreenReceiver.wasScreenOn
+                && !BreakTimerService.serviceRunning) {
             View current = getWindow().getDecorView().findViewById(R.id.imageButton2);
             Toast.makeText(getApplicationContext(), current.getContentDescription(),
                     Toast.LENGTH_SHORT).show();
@@ -52,12 +60,16 @@ public class BackToWorkActivity extends Activity {
 
     public void openSettings(View view) {
         leavingByButtonPush = true;
+        //Cancel in case it's running:
+        stopService(new Intent(this, BreakTimerService.class));
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
     public void startStudying(View view) {
         leavingByButtonPush = true;
+        //Cancel in case it's running:
+        stopService(new Intent(this, BreakTimerService.class));
         Intent intent = new Intent(this, StudyTimerActivity.class);
         startActivity(intent);
     }
