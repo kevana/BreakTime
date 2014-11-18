@@ -1,5 +1,8 @@
 package com.breaktime;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +13,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.content.res.Resources;
 
 
 public class ChooseBreakActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private ListView listView;
     private Vibrator vibrator;
+    final int min = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +32,27 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         long[] pattern = {100L, 200L, 100L, 200L, 100L, 200L};
         vibrator.vibrate(pattern, -1);
 
+        Resources res = getResources();
+        String[] items = res.getStringArray(R.array.activity_choose_break_options_array);
+        String[] static_items = res.getStringArray(R.array.activity_choose_break_static);
+        List<String> final_items = new ArrayList<String>();
 
+        Random rand = new Random();
+        int max = items.length - 1;
+        int first = rand.nextInt((max - min) + 1) + min;
+        int second = rand.nextInt((max - min) + 1) + min;
+        while (second == first){
+            second = rand.nextInt((max - min) + 1) + min;
+        }
+        final_items.add(items[first]);
+        final_items.add(items[second]);
+        for (String item : static_items){
+            final_items.add(item);
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, final_items);
         listView = (ListView) findViewById(R.id.chooseBreakListView);
+        listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
     }
 

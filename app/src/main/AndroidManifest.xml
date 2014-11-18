@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.breaktime" >
-    >
+    package="com.breaktime">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -22,10 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="com.crashlytics.ApiKey"
-            android:value="16e0b746acecc6f4d690cf2b4fe6649fde151ee9" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="16e0b746acecc6f4d690cf2b4fe6649fde151ee9"/>
 
         <activity
             android:name="com.breaktime.StudyTimerActivity"

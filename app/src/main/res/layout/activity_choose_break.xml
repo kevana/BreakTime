@@ -7,8 +7,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.breaktime.ChooseBreakActivity"
-    android:background="@color/background"
-    >
+    android:background="@color/background">
+
 
     <ListView
         android:id="@+id/chooseBreakListView"
@@ -19,7 +19,6 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
         android:layout_marginTop="200dp"
-        android:entries="@array/activity_choose_break_options_array"
         />
 
     <TextView

@@ -56,6 +56,18 @@
         android:onClick="decrementStudyTime"
         android:src="@drawable/minus" />
 
+    <ImageButton
+        android:id="@+id/addApp"
+        android:scaleType="fitCenter"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/studyTimeText"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="350dp"
+        android:background="@android:color/transparent"
+        android:onClick="pullAppList"
+        android:src="@drawable/plus" />
+
     <TextView
         android:id="@+id/breakTimeTitleText"
         android:layout_width="wrap_content"
@@ -106,8 +118,5 @@
         android:background="@android:color/transparent"
         android:onClick="decrementBreakTime"
         android:src="@drawable/minus" />
-
-
-
 
 </RelativeLayout>
