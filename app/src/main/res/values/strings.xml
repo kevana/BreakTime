@@ -13,4 +13,12 @@
     <string name="title_activity_back_to_work">BackToWorkActivity</string>
     <string name="activity_back_to_work_title">Back to Work</string>
 
+    <string-array name="activity_choose_break_options_array">
+        <item>Get me a video!</item>
+        <item>Play me a song!</item>
+        <item>Do my own thing.</item>
+        <item>Skip this break</item>
+    </string-array>
+
+
 </resources>

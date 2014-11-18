@@ -17,7 +17,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="176dp"
         android:text="@string/activity_back_to_work_title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/whiteFull"/>
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -29,7 +30,8 @@
         android:layout_toStartOf="@+id/textView"
         android:onClick="startStudying"
         android:src="@android:drawable/ic_input_get"
-        android:contentDescription="Back to work" />
+        android:contentDescription="Back to work"
+        />
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -43,14 +45,14 @@
 
     <ImageButton
         android:id="@+id/imageButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:scaleType="fitCenter"
         android:background="@android:color/transparent"
         android:onClick="openSettings"
-        android:src="@drawable/settings48"
-        android:contentDescription="Settings" />
+        android:src="@drawable/settings48" />
 
 </RelativeLayout>

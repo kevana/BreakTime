@@ -6,16 +6,35 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class ChooseBreakActivity extends Activity {
+public class ChooseBreakActivity extends Activity implements AdapterView.OnItemClickListener {
+
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_break);
+        listView = (ListView)findViewById(R.id.chooseBreakListView);
+        listView.setOnItemClickListener(this);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+        Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
+                Toast.LENGTH_SHORT).show();
+        // TODO: Start break timer
+        startService(new Intent(this, BreakTimerService.class));
+        Intent homeIntent= new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory(Intent.CATEGORY_HOME);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
