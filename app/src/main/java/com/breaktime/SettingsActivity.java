@@ -1,9 +1,13 @@
 package com.breaktime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -15,6 +19,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 
 public class SettingsActivity extends Activity {
@@ -123,7 +128,15 @@ public class SettingsActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         AlertDialog.Builder builderInner = new AlertDialog.Builder(
                                 SettingsActivity.this);
+                        // Get Choice
+                        ListView lw = ((AlertDialog)dialog).getListView();
+                        Log.d(TAG, "ListView : " + lw.getMaxScrollAmount());
+                        Log.d(TAG, "Item pos : " + lw.getCheckedItemPosition());
+                        Log.d(TAG, "which : " + which);
+                        final Object checkedItem = lw.getAdapter().getItem(which);
+                        // Give message
                         builderInner.setTitle("You added Item");
+                        builderInner.setMessage(checkedItem.toString());
                         builderInner.setPositiveButton("Ok",
                                 new DialogInterface.OnClickListener() {
 
@@ -131,7 +144,14 @@ public class SettingsActivity extends Activity {
                                     public void onClick(
                                             DialogInterface dialog,
                                             int which) {
-
+                                        // Add activity to current list
+                                        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                        Set<String> activities = new HashSet<String>();
+                                        activities = settings.getStringSet(PrefID.ACTIVITIES, null);
+                                        SharedPreferences.Editor ed = settings.edit();
+                                        activities.add(checkedItem.toString());
+                                        ed.putStringSet("key", activities);
+                                        ed.commit();
                                         dialog.dismiss();
                                     }
                                 });

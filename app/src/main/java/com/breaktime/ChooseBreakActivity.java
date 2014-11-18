@@ -1,13 +1,18 @@
 package com.breaktime;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,6 +25,7 @@ import android.content.res.Resources;
 public class ChooseBreakActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private ListView listView;
+    private SharedPreferences settings;
     private Vibrator vibrator;
     final int min = 0;
 
@@ -33,10 +39,11 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         vibrator.vibrate(pattern, -1);
 
         Resources res = getResources();
-        String[] items = res.getStringArray(R.array.activity_choose_break_options_array);
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
         String[] static_items = res.getStringArray(R.array.activity_choose_break_static);
         List<String> final_items = new ArrayList<String>();
-
+        String[] items = activities.toArray(new String[activities.size()]);
         Random rand = new Random();
         int max = items.length - 1;
         int first = rand.nextInt((max - min) + 1) + min;
