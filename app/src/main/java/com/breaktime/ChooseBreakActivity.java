@@ -18,17 +18,18 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
 
     private ListView listView;
     private Vibrator vibrator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_break);
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        long[] pattern = {100L, 200L,100L, 200L,100L, 200L};
+        long[] pattern = {100L, 200L, 100L, 200L, 100L, 200L};
         vibrator.vibrate(pattern, -1);
 
 
-        listView = (ListView)findViewById(R.id.chooseBreakListView);
+        listView = (ListView) findViewById(R.id.chooseBreakListView);
         listView.setOnItemClickListener(this);
     }
 
@@ -38,7 +39,7 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
                 Toast.LENGTH_SHORT).show();
         // TODO: Start break timer
         startService(new Intent(this, BreakTimerService.class));
-        Intent homeIntent= new Intent(Intent.ACTION_MAIN);
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.addCategory(Intent.CATEGORY_HOME);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
