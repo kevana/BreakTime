@@ -1,14 +1,19 @@
 package com.breaktime;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.breaktime.screen.ScreenReceiver;
 
 
 public class BackToWorkActivity extends Activity {
@@ -21,6 +26,13 @@ public class BackToWorkActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_back_to_work);
         stopService(new Intent(this, BreakTimerService.class));
+
+        //Set up ScreenReceiver.
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new ScreenReceiver();
+        registerReceiver(mReceiver, filter);
+
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {100L, 200L,100L, 200L,100L, 200L};
@@ -48,11 +60,14 @@ public class BackToWorkActivity extends Activity {
     }
 
     @Override
-    public void onStop(){
-        if(!leavingByButtonPush) {
-            snooze(getWindow().getDecorView().findViewById(R.id.imageButton2));
+    public void onPause(){
+        if(!leavingByButtonPush && ScreenReceiver.wasScreenOn) {
+            View current = getWindow().getDecorView().findViewById(R.id.imageButton2);
+            Toast.makeText(getApplicationContext(), current.getContentDescription(),
+                    Toast.LENGTH_SHORT).show();
+            startService(new Intent(this, BreakTimerService.class));
         }
-        super.onStop();
+        super.onPause();
 
     }
 
