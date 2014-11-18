@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/imageButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="65dp"
+
         android:onClick="finishSession"
         android:text="Finish Session Early"
         android:textColor="@color/whiteFull"
@@ -34,6 +34,14 @@
         android:onClick="openSettings"
         android:src="@drawable/settings48" />
 
+    <ImageView
+        android:layout_width="230sp"
+        android:layout_height="230sp"
+        android:layout_below="@+id/minutesLeftText"
+        android:layout_marginTop="0dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/flip_diagram"
+        />
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
@@ -41,7 +49,7 @@
 
         android:layout_centerHorizontal="true"
 
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="0dp"
         android:width="175sp"
         android:height="170sp"
         android:gravity="center_horizontal"
@@ -54,6 +62,7 @@
         android:typeface="sans"
         android:textColor="@color/whiteFull"/>
     <TextView
+        android:id="@+id/minutesLeftText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timerTextView"
