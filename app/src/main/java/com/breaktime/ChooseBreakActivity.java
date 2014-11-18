@@ -1,8 +1,10 @@
 package com.breaktime;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +17,17 @@ import android.widget.Toast;
 public class ChooseBreakActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private ListView listView;
-
+    private Vibrator vibrator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_break);
+
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {100L, 200L,100L, 200L,100L, 200L};
+        vibrator.vibrate(pattern, -1);
+
+
         listView = (ListView)findViewById(R.id.chooseBreakListView);
         listView.setOnItemClickListener(this);
     }

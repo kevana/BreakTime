@@ -5,15 +5,18 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class BreakTimerService extends Service {
 
+    private BreakTimerService breakTimerService;
     private WindowManager windowManager;
     private ImageView chatHead;
 
     public BreakTimerService() {
+        breakTimerService = this;
     }
 
     @Override
@@ -41,6 +44,17 @@ public class BreakTimerService extends Service {
 
         params.x = 0;
         params.y = 100;
+
+        chatHead.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getBaseContext(), BackToWorkActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getApplication().startActivity(intent);
+                    }
+                }
+        );
 
         windowManager.addView(chatHead, params);
     }
