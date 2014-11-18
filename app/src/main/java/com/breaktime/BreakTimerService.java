@@ -20,6 +20,9 @@ public class BreakTimerService extends Service {
     private WindowManager windowManager;
     private TextView chatHeadText;
     private WindowManager.LayoutParams params;
+    public static boolean serviceRunning;
+    BreakTimer breakTimer;
+    BreakTimerService breakTimerService;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -32,6 +35,7 @@ public class BreakTimerService extends Service {
     public void onCreate() {
         super.onCreate();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        breakTimerService = this;
 
         chatHeadText = new TextView(this);
         // TODO: Change to TextView with timer?
@@ -42,11 +46,12 @@ public class BreakTimerService extends Service {
 
         remainingMillis = settings.getLong(PrefID.BREAK_TIME, -1);
 
-        BreakTimer breakTimer = new BreakTimer(remainingMillis, 1000);
+        breakTimer = new BreakTimer(remainingMillis, 1000);
         breakTimer.start();
         long seconds = remainingMillis / 1000;
         chatHeadText.setText(String.format("%d", seconds));
         Log.v("BreakTimerService", "New BreakTimer Started");
+        serviceRunning = true;
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -77,6 +82,9 @@ public class BreakTimerService extends Service {
             private int initialY;
             private float initialTouchX;
             private float initialTouchY;
+            private boolean moveOccurred = false;
+            int displacementX;
+            int displacementY;
 
             // From http://www.piwai.info/chatheads-basics
             @Override
@@ -87,12 +95,23 @@ public class BreakTimerService extends Service {
                         initialY = params.y;
                         initialTouchX = event.getRawX();
                         initialTouchY = event.getRawY();
+                        moveOccurred = false;
                         return true;
                     case MotionEvent.ACTION_UP:
+                        Log.v("BreakTimerMove:", ""+ (Math.abs(displacementX) + Math.abs(displacementY)));
+                        if(Math.abs(displacementX) + Math.abs(displacementY) < 20){
+                            //Action was a click
+                            breakTimerService.stopSelf();
+                            Intent intent = new Intent(getBaseContext(), BackToWorkActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplication().startActivity(intent);
+                        }
                         return true;
                     case MotionEvent.ACTION_MOVE:
-                        params.x = initialX + (int) (event.getRawX() - initialTouchX);
-                        params.y = initialY + (int) (event.getRawY() - initialTouchY);
+                        displacementX = (int) (event.getRawX() - initialTouchX);
+                        displacementY = (int) (event.getRawY() - initialTouchY);
+                        params.x = initialX + displacementX;
+                        params.y = initialY + displacementY;
                         windowManager.updateViewLayout(chatHeadText, params);
                         return true;
                 }
@@ -108,6 +127,8 @@ public class BreakTimerService extends Service {
     public void onDestroy() {
         super.onDestroy();
         if (chatHeadText != null) windowManager.removeView(chatHeadText);
+        breakTimer.cancel();
+        serviceRunning = false;
     }
 
     public class BreakTimer extends CountDownTimer {
