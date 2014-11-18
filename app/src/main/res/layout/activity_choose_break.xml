@@ -19,7 +19,6 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="50dp"
         android:layout_marginTop="200dp"
-        android:entries="@array/activity_choose_break_options_array"
         />
 
     <TextView

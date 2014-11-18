@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
@@ -21,32 +19,29 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_home);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        long studyTime = settings.getLong(PrefID.STUDY_TIME, -1);
+        long breakTime = settings.getLong(PrefID.BREAK_TIME, -1);
+        if(studyTime < 0){
+            studyTime = 30000L;
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.STUDY_TIME, studyTime);
+            ed.commit();
         }
-        return super.onOptionsItemSelected(item);
+        if(breakTime < 0){
+            breakTime = 5000L;
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.BREAK_TIME, breakTime);
+            ed.commit();
+        }
     }
 
     public void startStudying(View view) {
-        SharedPreferences.Editor ed = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        SharedPreferences.Editor ed = PreferenceManager.
+                getDefaultSharedPreferences(getApplicationContext()).edit();
         ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
-        ed.commit();
+        ed.apply();
         Intent intent = new Intent(this, StudyTimerActivity.class);
         startActivity(intent);
     }

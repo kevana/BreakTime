@@ -41,7 +41,9 @@
         android:src="@android:drawable/ic_popup_reminder"
         android:layout_alignTop="@+id/imageButton"
         android:layout_toRightOf="@+id/textView"
-        android:contentDescription="Snooze Button" />
+        android:contentDescription="Snooze Button"
+        android:onClick="snooze"
+        />
 
     <ImageButton
         android:id="@+id/imageButton3"
