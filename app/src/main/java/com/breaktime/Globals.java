@@ -9,6 +9,7 @@ public class Globals{
 
     // Global variable
     private HashMap<String,Intent> intentMap = new HashMap<String, Intent>();
+    private Intent currentActivity;
 
     // Restrict the constructor from being instantiated
     private Globals(){}
@@ -18,6 +19,14 @@ public class Globals{
     }
     public HashMap<String,Intent> getData(){
         return this.intentMap;
+    }
+
+    public void setActivity(Intent d){
+        this.currentActivity=d;
+    }
+
+    public Intent getCurrentActivity(){
+        return this.currentActivity;
     }
 
     public static synchronized Globals getInstance(){

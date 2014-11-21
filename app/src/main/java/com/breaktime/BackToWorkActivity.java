@@ -78,9 +78,9 @@ public class BackToWorkActivity extends Activity {
         Toast.makeText(getApplicationContext(), view.getContentDescription(),
                 Toast.LENGTH_SHORT).show();
         startService(new Intent(this, BreakTimerService.class));
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory(Intent.CATEGORY_HOME);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(homeIntent);
+        // Get current Activity
+        Globals g = Globals.getInstance();
+        Intent currentActivity = g.getCurrentActivity();
+        startActivity(currentActivity);
     }
 }

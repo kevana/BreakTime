@@ -80,6 +80,7 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         Log.d(TAG, "Intents first : " + intents.entrySet());
         Intent startMe = intents.get(adapter.getItemAtPosition(position));
         Log.d(TAG, "Intent got : " + startMe);
+        g.setActivity(startMe);
         // Start App
         startActivity(startMe);
     }
