@@ -68,6 +68,18 @@
         android:onClick="pullAppList"
         android:src="@drawable/plus" />
 
+    <ImageButton
+        android:id="@+id/removeApp"
+        android:scaleType="fitCenter"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/studyTimeText"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="350dp"
+        android:background="@android:color/transparent"
+        android:onClick="removeAppList"
+        android:src="@drawable/minus" />
+
     <TextView
         android:id="@+id/breakTimeTitleText"
         android:layout_width="wrap_content"

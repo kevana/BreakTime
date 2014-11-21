@@ -12,7 +12,10 @@ import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -31,6 +34,7 @@ public class HomeActivity extends Activity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_home);
 
+        // SET UP PREFERENCE MANAGER
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         long studyTime = settings.getLong(PrefID.STUDY_TIME, -1);
         long breakTime = settings.getLong(PrefID.BREAK_TIME, -1);
@@ -58,6 +62,28 @@ public class HomeActivity extends Activity {
             Log.v("SettingsActivity", "Preferences created: " + activities.toString());
         }
         Log.v("SettingsActivity", "Preferences retrieved: " + settings.getStringSet(PrefID.ACTIVITIES, null).toString());
+
+        // SET UP GLOBAL INTENT LIST
+        Globals g = Globals.getInstance();
+        if (g.getData().isEmpty()){
+            Resources res = getResources();
+            settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String[] static_items = res.getStringArray(R.array.activity_choose_break_static);
+            Set<String> activities_names = settings.getStringSet(PrefID.ACTIVITIES, null);
+            HashMap<String,Intent> intents = new HashMap<String,Intent>();
+
+            // Redo all intents for saved activities (super hacky whatever)
+            for (String name : activities_names){
+                Intent tempIntent = getPackageManager().getLaunchIntentForPackage(name);
+                intents.put(name, tempIntent);
+            }
+            // Create home intent
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory(Intent.CATEGORY_HOME);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intents.put(static_items[0], homeIntent);
+            g.setData(intents);
+        }
     }
 
     public void startStudying(View view) {

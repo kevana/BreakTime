@@ -1,7 +1,7 @@
 package com.breaktime;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -28,6 +29,7 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
     private SharedPreferences settings;
     private Vibrator vibrator;
     final int min = 0;
+    final private  String TAG = "ChooseBreak-debug";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +71,17 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
                 Toast.LENGTH_SHORT).show();
         // TODO: Start break timer
         startService(new Intent(this, BreakTimerService.class));
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory(Intent.CATEGORY_HOME);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(homeIntent);
+
+
+        Log.d(TAG, "Item got : " + adapter.getItemAtPosition(position));
+        // get Intent to start
+        Globals g = Globals.getInstance();
+        HashMap<String, Intent> intents = g.getData();
+        Log.d(TAG, "Intents first : " + intents.entrySet());
+        Intent startMe = intents.get(adapter.getItemAtPosition(position));
+        Log.d(TAG, "Intent got : " + startMe);
+        // Start App
+        startActivity(startMe);
     }
 
     public void openSettings(View view) {

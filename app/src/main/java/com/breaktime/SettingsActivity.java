@@ -1,5 +1,6 @@
 package com.breaktime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ApplicationInfo;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.content.Intent;
 
 
 public class SettingsActivity extends Activity {
@@ -91,14 +93,18 @@ public class SettingsActivity extends Activity {
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
         List<String> items = new ArrayList<String>();
         List<Integer> icons = new ArrayList<Integer>();
+        final List<Intent> launches = new ArrayList<Intent>();
         int i = 0;
+        // get activities currently added
+        Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
         // Add all apps to list
         for (ApplicationInfo packageInfo : packages) {
-            if (packageInfo.icon > 0 &&  pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
+            if (packageInfo.icon > 0 &&  pm.getLaunchIntentForPackage(packageInfo.packageName) != null && !activities.contains(packageInfo.packageName)) {
                 Log.d(TAG, "Installed package :" + packageInfo.packageName);
                 Log.d(TAG, "Icon : " + packageInfo.icon);
                 Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
                 Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
+                launches.add(pm.getLaunchIntentForPackage(packageInfo.packageName));
                 icons.add(packageInfo.icon);
                 items.add(packageInfo.packageName);
             }
@@ -130,10 +136,9 @@ public class SettingsActivity extends Activity {
                                 SettingsActivity.this);
                         // Get Choice
                         ListView lw = ((AlertDialog)dialog).getListView();
-                        Log.d(TAG, "ListView : " + lw.getMaxScrollAmount());
-                        Log.d(TAG, "Item pos : " + lw.getCheckedItemPosition());
-                        Log.d(TAG, "which : " + which);
                         final Object checkedItem = lw.getAdapter().getItem(which);
+                        final Intent itemIntent  = launches.get(which);
+                        Log.d(TAG, "Intent : " + itemIntent.toString());
                         // Give message
                         builderInner.setTitle("You added Item");
                         builderInner.setMessage(checkedItem.toString());
@@ -150,7 +155,75 @@ public class SettingsActivity extends Activity {
                                         activities = settings.getStringSet(PrefID.ACTIVITIES, null);
                                         SharedPreferences.Editor ed = settings.edit();
                                         activities.add(checkedItem.toString());
-                                        ed.putStringSet("key", activities);
+                                        ed.putStringSet(PrefID.ACTIVITIES, activities);
+                                        ed.commit();
+                                        // Add intent to global list
+                                        Globals g = Globals.getInstance();
+                                        HashMap<String, Intent> intents = g.getData();
+                                        intents.put(checkedItem.toString(), itemIntent);
+                                        Log.d(TAG, "intents : " + itemIntent.toString());
+                                        g.setData(intents);
+
+                                        dialog.dismiss();
+                                    }
+                                });
+                        builderInner.show();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    public void removeAppList(View v) {
+        Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
+        String[] items = activities.toArray(new String[activities.size()]);
+        final ListAdapter adapter = new ArrayAdapterWithIcon(context, items, new Integer[items.length]);
+
+        // Build alert dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set title
+        alertDialogBuilder.setTitle("Pick an App to remove from your activities");
+        alertDialogBuilder.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialogBuilder.setAdapter(adapter,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                                SettingsActivity.this);
+                        // Get Choice
+                        ListView lw = ((AlertDialog)dialog).getListView();
+                        final Object checkedItem = lw.getAdapter().getItem(which);
+                        // Give message
+                        builderInner.setTitle("You have removed the activity");
+                        builderInner.setMessage(checkedItem.toString());
+                        builderInner.setPositiveButton("Ok",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(
+                                            DialogInterface dialog,
+                                            int which) {
+                                        // Add activity to current list
+                                        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                        Set<String> activities = new HashSet<String>();
+                                        activities = settings.getStringSet(PrefID.ACTIVITIES, null);
+                                        SharedPreferences.Editor ed = settings.edit();
+                                        activities.remove(checkedItem.toString());
+                                        ed.putStringSet(PrefID.ACTIVITIES, activities);
                                         ed.commit();
                                         dialog.dismiss();
                                     }
