@@ -20,10 +20,10 @@ android {
     buildToolsVersion '20.0.0'
     defaultConfig {
         applicationId 'com.breaktime'
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 20
-        versionCode 5
-        versionName '0.5'
+        versionCode 7
+        versionName '0.7'
     }
     buildTypes {
         release {
