@@ -65,6 +65,8 @@ public class SettingsActivity extends Activity {
         SharedPreferences.Editor ed = settings.edit();
         ed.putLong(PrefID.STUDY_TIME, studyTime);
         ed.putLong(PrefID.BREAK_TIME, breakTime);
+        ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
+
         ed.apply();
     }
 

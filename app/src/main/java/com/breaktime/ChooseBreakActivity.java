@@ -39,6 +39,8 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {100L, 200L, 100L, 200L, 100L, 200L};
         vibrator.vibrate(pattern, -1);
+        FlashController.flash(200);
+
 
         Resources res = getResources();
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

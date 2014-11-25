@@ -80,6 +80,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
             // Start timer
             studyTimer = new StudyTimer(remainingMillis, 1000);
             vibrator.vibrate(new long[]{100L, 250L, 300L, 350L}, -1);
+            FlashController.flash(200);
             studyTimer.start();
             Log.v("StudyTimerActivity", "New StudyTimer Started");
         }
@@ -94,13 +95,13 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         // Register a listener for the sensor.
         super.onResume();
         sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+//        Handler h = new Handler();
+//        h.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
                 audioManager.setRingerMode(originalAudioLevel);
-            }
-        }, 2000);
+//            }
+//        }, 2000);
     }
 
     @Override
@@ -108,12 +109,10 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         // Be sure to unregister the sensor when the activity pauses.
         super.onDestroy();
         sensorManager.unregisterListener(this);
-        if (studyTimer != null) {
+        if (studyTimer != null && timerRunning) {
             studyTimer.cleanup();
         }
-        SharedPreferences.Editor ed = settings.edit();
-        ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
-        ed.apply();
+
         Log.v("studytimer", "study time remaining in prefs: " +
                 settings.getLong(PrefID.STUDY_TIME_REMAINING, -5));
     }
@@ -129,7 +128,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         startActivity(intent);
     }
 
-    public class StudyTimer extends CountDownTimer {
+    private class StudyTimer extends CountDownTimer {
 
         public StudyTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -137,15 +136,13 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
             timerTextView.setText(String.format("%d", seconds));
             wl.acquire();
 
-            //Delay running this until after vibration is done
-            originalAudioLevel = audioManager.getRingerMode();
-            Handler h = new Handler();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+//            Handler h = new Handler();
+//            h.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                }
-            }, 2000);
+//                }
+//            }, 2000);
 
             timerRunning = true;
         }
@@ -164,6 +161,14 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         public void onFinish() {
             this.cleanup();
             studyTimerActivity.finish();
+
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putLong(PrefID.STUDY_TIME_REMAINING, -1);
+            ed.apply();
+
+            Log.v("inStudytimer", "study time remaining in prefs: " +
+                    settings.getLong(PrefID.STUDY_TIME_REMAINING, -5));
+
             Intent intent = new Intent(studyTimerActivity, ChooseBreakActivity.class);
             startActivity(intent);
         }

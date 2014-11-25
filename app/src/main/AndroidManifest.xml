@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-feature android:name="android.hardware.Camera"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <permission android:name="android.permission.FLASHLIGHT"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="normal" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +31,8 @@
         <activity
             android:name="com.breaktime.StudyTimerActivity"
             android:label="@string/title_activity_study_timer"
-            android:parentActivityName="com.breaktime.HomeActivity" >
+            android:parentActivityName="com.breaktime.HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.breaktime.HomeActivity" />
@@ -34,18 +40,21 @@
         <activity
             android:name="com.breaktime.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.breaktime.HomeActivity" >
+            android:parentActivityName="com.breaktime.HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.breaktime.HomeActivity" />
         </activity>
         <activity
             android:name="com.breaktime.ChooseBreakActivity"
-            android:label="@string/title_activity_choose_break" >
+            android:label="@string/title_activity_choose_break"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.breaktime.BackToWorkActivity"
-            android:label="@string/title_activity_back_to_work" >
+            android:label="@string/title_activity_back_to_work"
+            android:screenOrientation="portrait">
         </activity>
 
         <service
