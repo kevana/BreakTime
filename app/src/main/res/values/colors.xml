@@ -2,11 +2,12 @@
 <resources>
     <!-- http://www.google.com/design/spec/style/color.html#color-color-palette -->
 
-    <color name="background">#FFD32F2F</color>
+    <color name="background">@color/red900</color>
 
-    <color name="red500">#FFF44336</color>
     <color name="red100">#FFFFCDD2</color>
+    <color name="red500">#FFF44336</color>
     <color name="red700">#FFD32F2F</color>
+    <color name="red900">#FFB71C1C</color>
 
     <color name="whiteFull">#FFFFFFFF</color>
 </resources>

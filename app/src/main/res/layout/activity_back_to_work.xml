@@ -6,8 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.breaktime.BackToWorkActivity"
-    android:background="@color/background">
+    tools:context="com.breaktime.BackToWorkActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -17,8 +16,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="176dp"
         android:text="@string/activity_back_to_work_title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/whiteFull"/>
+        android:textColor="@color/whiteFull"
+        android:textSize="28sp"/>
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -47,13 +46,12 @@
 
     <ImageButton
         android:id="@+id/imageButton3"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:scaleType="fitCenter"
-        android:background="@android:color/transparent"
         android:onClick="openSettings"
         android:src="@drawable/settings48" />
 

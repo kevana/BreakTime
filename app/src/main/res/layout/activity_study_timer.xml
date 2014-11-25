@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -14,23 +13,20 @@
         android:id="@+id/FinishButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageButton"
-        android:layout_centerHorizontal="true"
-
         android:onClick="finishSession"
         android:text="Finish Session Early"
-        android:textColor="@color/whiteFull"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/minutesLeftText"
+        android:layout_alignEnd="@+id/minutesLeftText" />
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:scaleType="fitCenter"
-        android:background="@android:color/transparent"
         android:onClick="openSettings"
         android:src="@drawable/settings48" />
 
