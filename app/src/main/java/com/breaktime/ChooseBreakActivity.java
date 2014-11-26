@@ -71,10 +71,6 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
                 Toast.LENGTH_SHORT).show();
-        // TODO: Start break timer
-        startService(new Intent(this, BreakTimerService.class));
-
-
         Log.d(TAG, "Item got : " + adapter.getItemAtPosition(position));
         // get Intent to start
         Globals g = Globals.getInstance();
@@ -84,7 +80,12 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         Log.d(TAG, "Intent got : " + startMe);
         g.setActivity(startMe);
         // Start App
+        Resources res = getResources();
+        String[] static_items = res.getStringArray(R.array.activity_choose_break_static);
         startActivity(startMe);
+        if (adapter.getItemAtPosition(position).equals(static_items[0])){
+            startService(new Intent(this, BreakTimerService.class));
+        }
     }
 
     public void openSettings(View view) {
