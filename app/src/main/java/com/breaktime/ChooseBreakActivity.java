@@ -96,4 +96,9 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         Intent intent = new Intent(this, BackToWorkActivity.class);
         startActivity(intent);
     }
+
+    public void pullAppList(View view){
+        AppListManager.getInstance().pullAppList(view, getPackageManager(), this);
+
+    }
 }

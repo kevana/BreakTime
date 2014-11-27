@@ -33,8 +33,8 @@ public class BackToWorkActivity extends Activity {
 
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        long[] pattern = {100L, 200L,100L, 200L,100L, 200L};
-        vibrator.vibrate(pattern, -1);
+        long[] pattern = {1300L, 200L,100L, 200L,100L, 200L};
+        vibrator.vibrate(pattern, 0);
     }
 
     @Override
@@ -45,6 +45,7 @@ public class BackToWorkActivity extends Activity {
 
     @Override
     public void onPause(){
+        vibrator.cancel();
         if(!leavingByButtonPush
                 && ScreenReceiver.wasScreenOn
                 && !BreakTimerService.serviceRunning) {

@@ -61,8 +61,8 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_below="@id/studyTimeText"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="350dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="320dp"
         android:background="@android:color/transparent"
         android:onClick="pullAppList"
         android:src="@drawable/plus" />
@@ -74,7 +74,7 @@
         android:layout_height="48dp"
         android:layout_below="@id/studyTimeText"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="320dp"
         android:background="@android:color/transparent"
         android:onClick="removeAppList"
         android:src="@drawable/minus" />
