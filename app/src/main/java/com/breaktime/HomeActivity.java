@@ -68,6 +68,7 @@ public class HomeActivity extends Activity {
         if (g.getData().isEmpty()){
             Resources res = getResources();
             settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String[] inital_items = res.getStringArray(R.array.activity_choose_break_options_array);
             String[] static_items = res.getStringArray(R.array.activity_choose_break_static);
             Set<String> activities_names = settings.getStringSet(PrefID.ACTIVITIES, null);
             HashMap<String,Intent> intents = new HashMap<String,Intent>();
@@ -78,10 +79,18 @@ public class HomeActivity extends Activity {
                 intents.put(name, tempIntent);
             }
             // Create home intent
+            for (String activ : inital_items){
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory(Intent.CATEGORY_HOME);
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intents.put(activ, homeIntent);
+            }
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intents.put(static_items[0], homeIntent);
+            Intent intent = new Intent(this, StudyTimerActivity.class);
+            intents.put(static_items[1], intent);
             g.setData(intents);
         }
     }
