@@ -83,7 +83,7 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         Resources res = getResources();
         String[] static_items = res.getStringArray(R.array.activity_choose_break_static);
         startActivity(startMe);
-        if (adapter.getItemAtPosition(position).equals(static_items[0])){
+        if (!adapter.getItemAtPosition(position).equals(static_items[1])){
             startService(new Intent(this, BreakTimerService.class));
         }
     }
