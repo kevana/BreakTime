@@ -60,12 +60,24 @@
         android:scaleType="fitCenter"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_below="@id/studyTimeText"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="320dp"
+        android:layout_toRightOf="@+id/breakAppsListTitle"
+
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="235dp"
         android:background="@android:color/transparent"
         android:onClick="pullAppList"
         android:src="@drawable/plus" />
+
+    <ListView
+        android:id="@+id/breakAppsList"
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/breakAppsListTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp">
+
+
+    </ListView>
 
     <ImageButton
         android:id="@+id/removeApp"
@@ -92,6 +104,22 @@
         android:layout_toRightOf="@id/studyTimeTitleText"
         android:textColor="@color/whiteFull"
         />
+
+    <TextView
+        android:id="@+id/breakAppsListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current App Suggestions"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+
+
+
+        android:textColor="@color/whiteFull"
+        />
+
     <ImageButton
         android:id="@+id/plusBreak"
         android:scaleType="fitCenter"

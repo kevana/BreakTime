@@ -56,6 +56,15 @@ public class SettingsActivity extends Activity {
         studyTimeText.setText(String.format("%d", studyTime / 1000));
         breakTimeText = (TextView) findViewById(R.id.breakTimeText);
         breakTimeText.setText(String.format("%d", breakTime / 1000));
+        //Create app list:
+        ArrayList <String> currentApps = new ArrayList<String>();
+        currentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
+
+        final ListAdapter adapter = new AppArrayAdapter(this, R.id.breakAppsList,
+            currentApps);
+
+        ListView appList = (ListView) findViewById(R.id.breakAppsList);
+        appList.setAdapter(adapter);
     }
 
     @Override
@@ -89,11 +98,11 @@ public class SettingsActivity extends Activity {
         }
     }
 
-    public void pullAppList(View v) {
+    public void pullAppList_old(View v) {
         // get apps in phone
         final PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        List<String> items = new ArrayList<String>();
+        final List<String> items = new ArrayList<String>();
         List<Integer> icons = new ArrayList<Integer>();
         final List<Intent> launches = new ArrayList<Intent>();
         int i = 0;
@@ -108,7 +117,7 @@ public class SettingsActivity extends Activity {
                 Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
                 launches.add(pm.getLaunchIntentForPackage(packageInfo.packageName));
                 icons.add(packageInfo.icon);
-                items.add(packageInfo.packageName);
+                items.add(packageInfo.name);
             }
             i++;
         }
@@ -139,7 +148,8 @@ public class SettingsActivity extends Activity {
                         // Get Choice
                         ListView lw = ((AlertDialog)dialog).getListView();
                         final Object checkedItem = lw.getAdapter().getItem(which);
-                        final Intent itemIntent  = launches.get(which);
+                        int intentIndex = items.indexOf(which);
+                        final Intent itemIntent  = launches.get(intentIndex);
                         Log.d(TAG, "Intent : " + itemIntent.toString());
                         // Give message
                         builderInner.setTitle("You added Item");
@@ -180,7 +190,7 @@ public class SettingsActivity extends Activity {
         alertDialog.show();
     }
 
-    public void removeAppList(View v) {
+    public void removeAppList_old(View v) {
         Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
         String[] items = activities.toArray(new String[activities.size()]);
         final ListAdapter adapter = new ArrayAdapterWithIcon(context, items, new Integer[items.length]);
@@ -239,6 +249,15 @@ public class SettingsActivity extends Activity {
 
         // show it
         alertDialog.show();
+    }
+
+    public void pullAppList(View v){
+        AppListManager.getInstance().pullAppList(v, getPackageManager(), this);
+    }
+
+    public void removeAppList(View v){
+        AppListManager.getInstance().removeAppList(v, this);
+
     }
 
     public void incrementBreakTime(View v) {

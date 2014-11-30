@@ -14,6 +14,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +44,7 @@ public class AppListManager {
         this.currentContext = context;
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        Collections.sort(packages, new ApplicationInfoComparator(pm));
         List<String> items = new ArrayList<String>();
         List<Integer> icons = new ArrayList<Integer>();
         final List<Intent> launches = new ArrayList<Intent>();
@@ -53,11 +56,12 @@ public class AppListManager {
             if (packageInfo.icon > 0 &&  pm.getLaunchIntentForPackage(packageInfo.packageName) != null && !activities.contains(packageInfo.packageName)) {
                 Log.d(TAG, "Installed package :" + packageInfo.packageName);
                 Log.d(TAG, "Icon : " + packageInfo.icon);
+                Log.d(TAG, "Name : " + packageInfo.loadLabel(pm));
                 Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
                 Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
                 launches.add(pm.getLaunchIntentForPackage(packageInfo.packageName));
                 icons.add(packageInfo.icon);
-                items.add(packageInfo.packageName);
+                items.add(packageInfo.loadLabel(pm).toString());
             }
             i++;
         }
@@ -129,6 +133,84 @@ public class AppListManager {
         alertDialog.show();
 
 
+    }
+
+    public void removeAppList(View v, Context context) {
+        this.currentContext = context;
+        settings = PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
+        String[] items = activities.toArray(new String[activities.size()]);
+        final ListAdapter adapter = new ArrayAdapterWithIcon(context, items, new Integer[items.length]);
+
+        // Build alert dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                context);
+
+        // set title
+        alertDialogBuilder.setTitle("Pick an App to remove from your activities");
+        alertDialogBuilder.setNegativeButton("cancel",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialogBuilder.setAdapter(adapter,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                                currentContext);
+                        // Get Choice
+                        ListView lw = ((AlertDialog)dialog).getListView();
+                        final Object checkedItem = lw.getAdapter().getItem(which);
+                        // Give message
+                        builderInner.setTitle("You have removed the activity");
+                        builderInner.setMessage(checkedItem.toString());
+                        builderInner.setPositiveButton("Ok",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(
+                                            DialogInterface dialog,
+                                            int which) {
+                                        // Add activity to current list
+                                        settings = PreferenceManager.getDefaultSharedPreferences(currentContext);
+                                        Set<String> activities = new HashSet<String>();
+                                        activities = settings.getStringSet(PrefID.ACTIVITIES, null);
+                                        SharedPreferences.Editor ed = settings.edit();
+                                        activities.remove(checkedItem.toString());
+                                        ed.putStringSet(PrefID.ACTIVITIES, activities);
+                                        ed.commit();
+                                        dialog.dismiss();
+                                    }
+                                });
+                        builderInner.show();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
+    public class ApplicationInfoComparator implements Comparator<ApplicationInfo>{
+
+        private PackageManager pm;
+
+        public  ApplicationInfoComparator(PackageManager packageManager){
+            pm = packageManager;
+
+        }
+
+        @Override
+        public int compare(ApplicationInfo lhs, ApplicationInfo rhs) {
+            return (lhs.loadLabel(pm).toString()).compareTo(rhs.loadLabel(pm).toString());
+        }
     }
 
 

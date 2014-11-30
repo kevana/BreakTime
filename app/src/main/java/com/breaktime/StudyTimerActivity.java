@@ -43,30 +43,31 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         studyTimerActivity = this;
         timerTextView = (TextView) findViewById(R.id.timerTextView);
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        remainingMillis = settings.getLong(PrefID.STUDY_TIME_REMAINING, -1);
+        if (remainingMillis < 0) {
+            remainingMillis = settings.getLong(PrefID.STUDY_TIME, 12000L);
+        }
 
         powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = powerManager.newWakeLock(
                 PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK,
                 getClass().getName());
-
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         originalAudioLevel = audioManager.getRingerMode();
 
-        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Log.v("StudyTimerActivity", "Preferences retrieved: " + settings.toString());
-
-        // TODO: Set timer based on settings
-        remainingMillis = settings.getLong(PrefID.STUDY_TIME_REMAINING, -1);
-        if (remainingMillis < 0) {
-            remainingMillis = settings.getLong(PrefID.STUDY_TIME, 12000L);
-        }
         Log.v("StudyTimerActivity", "millis:" + remainingMillis);
         long seconds = remainingMillis / 1000;
         timerTextView.setText(String.format("%d", seconds));
+
+        //initialize and turn off timer
+        studyTimer = new StudyTimer(remainingMillis, 1000);
+        studyTimer.cleanup();
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
     }
 
     @Override
@@ -75,6 +76,7 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
         if (distance > 1.0 && timerRunning) {
             // Stop timer
             studyTimer.cleanup();
+            FlashController.flash(500);
             Log.v("StudyTimerActivity", "StudyTimer Cancelled");
         } else if (distance < 1.0 && !timerRunning && hasWindowFocus()) {
             // Start timer
@@ -123,9 +125,9 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
     }
 
     public void finishSession(View view) {
-        studyTimerActivity.finish();
-        Intent intent = new Intent(this, ChooseBreakActivity.class);
-        startActivity(intent);
+
+        studyTimer.onFinish();
+
     }
 
     private class StudyTimer extends CountDownTimer {
