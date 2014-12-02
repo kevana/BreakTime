@@ -34,6 +34,8 @@ public class HomeActivity extends Activity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_home);
 
+
+
         // SET UP PREFERENCE MANAGER
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         long studyTime = settings.getLong(PrefID.STUDY_TIME, -1);

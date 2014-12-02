@@ -63,7 +63,7 @@
         android:layout_toRightOf="@+id/breakAppsListTitle"
 
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="235dp"
+        android:layout_marginTop="255dp"
         android:background="@android:color/transparent"
         android:onClick="pullAppList"
         android:src="@drawable/plus" />

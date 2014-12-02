@@ -15,8 +15,7 @@
     <string name="activity_back_to_work_title">Back to Work</string>
 
     <string-array name="activity_choose_break_options_array">
-        <item>Get me a video!</item>
-        <item>Play me a song!</item>
+
     </string-array>
 
     <string-array name="activity_choose_break_static">

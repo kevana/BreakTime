@@ -32,6 +32,9 @@ public class SettingsActivity extends Activity {
     private SharedPreferences settings;
     final Context context = this;
     private static final String TAG = "AppTest";
+    private ArrayList<String> currentApps;
+    private AppArrayAdapter appListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,14 +60,13 @@ public class SettingsActivity extends Activity {
         breakTimeText = (TextView) findViewById(R.id.breakTimeText);
         breakTimeText.setText(String.format("%d", breakTime / 1000));
         //Create app list:
-        ArrayList <String> currentApps = new ArrayList<String>();
+        currentApps = new ArrayList<String>();
         currentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
 
-        final ListAdapter adapter = new AppArrayAdapter(this, R.id.breakAppsList,
-            currentApps);
+        appListAdapter = new AppArrayAdapter(this, currentApps);
 
         ListView appList = (ListView) findViewById(R.id.breakAppsList);
-        appList.setAdapter(adapter);
+        appList.setAdapter(appListAdapter);
     }
 
     @Override
@@ -253,11 +255,16 @@ public class SettingsActivity extends Activity {
 
     public void pullAppList(View v){
         AppListManager.getInstance().pullAppList(v, getPackageManager(), this);
+        currentApps.clear();
+        currentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
+        appListAdapter.notifyDataSetChanged();
     }
 
     public void removeAppList(View v){
         AppListManager.getInstance().removeAppList(v, this);
-
+        currentApps.clear();
+        currentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
+        appListAdapter.notifyDataSetChanged();
     }
 
     public void incrementBreakTime(View v) {

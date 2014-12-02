@@ -43,6 +43,7 @@ public class AppListManager {
         final String TAG = "AppTest";
         this.currentContext = context;
         settings = PreferenceManager.getDefaultSharedPreferences(context);
+        
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
         Collections.sort(packages, new ApplicationInfoComparator(pm));
         List<String> items = new ArrayList<String>();
