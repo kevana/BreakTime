@@ -3,6 +3,7 @@ package com.breaktime;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.util.Log;
 
 public class Globals{
     private static Globals instance;
@@ -10,14 +11,18 @@ public class Globals{
     // Global variable
     private HashMap<String,Intent> intentMap = new HashMap<String, Intent>();
     private Intent currentActivity;
+    private static final String TAG = "GLOBALS";
 
     // Restrict the constructor from being instantiated
     private Globals(){}
 
-    public void setData(HashMap<String,Intent> d){
+    public void setData(HashMap<String,Intent> d)
+    {
+        Log.d(TAG, "setData: " + d.entrySet());
         this.intentMap=d;
     }
     public HashMap<String,Intent> getData(){
+        Log.d(TAG, "setData: " + this.intentMap.entrySet());
         return this.intentMap;
     }
 

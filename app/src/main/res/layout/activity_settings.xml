@@ -74,7 +74,8 @@
         android:layout_height="200dp"
         android:layout_below="@+id/breakAppsListTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:textColor="@color/whiteFull">
 
 
     </ListView>

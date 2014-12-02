@@ -30,7 +30,6 @@ public class ArrayAdapterWithIcon extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        Log.d(TAG, "position :" + images.get(position));
         textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0); //#TODO Add the image thing (images.get(position), 0, 0, 0)
         textView.setCompoundDrawablePadding(
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getContext().getResources().getDisplayMetrics()));

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,6 +29,7 @@ public class AppListManager {
     private static AppListManager ourInstance = new AppListManager();
     private Context currentContext;
     SharedPreferences settings;
+    private PackageManager currentPM;
 
     public static AppListManager getInstance() {
         return ourInstance;
@@ -42,31 +44,52 @@ public class AppListManager {
 //        final PackageManager pm = getPackageManager();
         final String TAG = "AppTest";
         this.currentContext = context;
+        this.currentPM = pm;
         settings = PreferenceManager.getDefaultSharedPreferences(context);
-        
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        Collections.sort(packages, new ApplicationInfoComparator(pm));
-        List<String> items = new ArrayList<String>();
-        List<Integer> icons = new ArrayList<Integer>();
-        final List<Intent> launches = new ArrayList<Intent>();
-        int i = 0;
-        // get activities currently added
-        Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
-        // Add all apps to list
-        for (ApplicationInfo packageInfo : packages) {
-            if (packageInfo.icon > 0 &&  pm.getLaunchIntentForPackage(packageInfo.packageName) != null && !activities.contains(packageInfo.packageName)) {
-                Log.d(TAG, "Installed package :" + packageInfo.packageName);
-                Log.d(TAG, "Icon : " + packageInfo.icon);
-                Log.d(TAG, "Name : " + packageInfo.loadLabel(pm));
-                Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
-                Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
-                launches.add(pm.getLaunchIntentForPackage(packageInfo.packageName));
-                icons.add(packageInfo.icon);
-                items.add(packageInfo.loadLabel(pm).toString());
+
+        List<String> appNamesAndPackage = new ArrayList<String>();;
+
+        if(settings.getStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, null) == null){
+            List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+            Collections.sort(packages, new ApplicationInfoComparator(pm));
+            List<Integer> icons = new ArrayList<Integer>();
+            final List<Intent> launches = new ArrayList<Intent>();
+            int i = 0;
+            // get activities currently added
+            Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
+            // Add all apps to list
+            for (ApplicationInfo packageInfo : packages) {
+                if (packageInfo.icon > 0 &&  pm.getLaunchIntentForPackage(packageInfo.packageName) != null && !activities.contains(packageInfo.packageName)) {
+                    Log.d(TAG, "Installed package :" + packageInfo.packageName);
+                    Log.d(TAG, "Icon : " + packageInfo.icon);
+                    Log.d(TAG, "Name : " + packageInfo.loadLabel(pm));
+                    Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
+                    Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
+                    launches.add(pm.getLaunchIntentForPackage(packageInfo.packageName));
+                    icons.add(packageInfo.icon);
+                    appNamesAndPackage.add(packageInfo.loadLabel(pm).toString() + ";" + packageInfo.packageName);
+                }
+                i++;
             }
-            i++;
+            HashSet<String> itemSet = new HashSet<String>();
+            itemSet.addAll(appNamesAndPackage);
+            //Add to SharedPref
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, itemSet);
+            ed.commit();
+        }else{
+            appNamesAndPackage.addAll(settings.getStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, null));
         }
-        final ListAdapter adapter = new ArrayAdapterWithIcon(context, items, icons);
+        Collections.sort(appNamesAndPackage);
+        ArrayList<String> appName = new ArrayList<String>();
+        final ArrayList<String> appPackage = new ArrayList<String>();
+        for(String appNamePack : appNamesAndPackage){
+            String[] parts = appNamePack.split(";");
+            appName.add(parts[0]);
+            appPackage.add(parts[1]);
+        }
+
+        final ListAdapter adapter = new ArrayAdapterWithIcon(context, appName, new ArrayList<Integer>());
 
         // Build alert dialog
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -93,8 +116,11 @@ public class AppListManager {
                         // Get Choice
                         ListView lw = ((AlertDialog)dialog).getListView();
                         final Object checkedItem = lw.getAdapter().getItem(which);
-                        final Intent itemIntent  = launches.get(which);
-                        Log.d(TAG, "Intent : " + itemIntent.toString());
+                        final Intent
+                            itemIntent = currentPM.getLaunchIntentForPackage(appPackage.get(which));
+                            Log.d(TAG, "Intent : " + itemIntent.toString());
+                        //launches.get(which);
+
                         // Give message
                         builderInner.setTitle("You added Item");
                         builderInner.setMessage(checkedItem.toString());

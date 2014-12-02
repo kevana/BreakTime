@@ -76,9 +76,14 @@ public class HomeActivity extends Activity {
             HashMap<String,Intent> intents = new HashMap<String,Intent>();
 
             // Redo all intents for saved activities (super hacky whatever)
-            for (String name : activities_names){
-                Intent tempIntent = getPackageManager().getLaunchIntentForPackage(name);
-                intents.put(name, tempIntent);
+            Set<String> activity_names_and_packages = settings.getStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, null);
+            for (String appNamePack : activity_names_and_packages){
+                String[] parts = appNamePack.split(";");
+                if(activities_names.contains(parts[0])){
+                    //Contains app name, add intent
+                    Intent tempIntent = getPackageManager().getLaunchIntentForPackage(parts[1]);
+                    intents.put(parts[0], tempIntent);
+                }
             }
             // Create home intent
             for (String activ : inital_items){

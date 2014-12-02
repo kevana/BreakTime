@@ -31,13 +31,23 @@
         android:src="@drawable/settings48" />
 
     <ImageView
+        android:id="@+id/flipDiagram"
         android:layout_width="230sp"
         android:layout_height="230sp"
         android:layout_below="@+id/minutesLeftText"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/flip_diagram"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/flipDiagram"
+        android:text="(flip to start)"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        />
+
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
