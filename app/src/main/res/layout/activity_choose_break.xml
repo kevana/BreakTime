@@ -45,15 +45,6 @@
         android:textColor="@color/whiteFull"
         />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="gotoWork"
-        android:text="Goto endbreak"
-        android:layout_alignTop="@+id/studyButton"
-        android:layout_centerHorizontal="true"/>
-
     <ImageButton
         android:id="@+id/studyButton"
         android:layout_width="62dp"
