@@ -20,7 +20,7 @@
         android:layout_alignEnd="@+id/minutesLeftText" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/studyButton"
         android:layout_width="62dp"
         android:layout_height="62dp"
         android:layout_alignParentBottom="true"
