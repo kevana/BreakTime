@@ -22,8 +22,8 @@ android {
         applicationId 'com.breaktime'
         minSdkVersion 16
         targetSdkVersion 20
-        versionCode 7
-        versionName '0.7'
+        versionCode 9
+        versionName '0.9'
     }
     buildTypes {
         release {
