@@ -60,22 +60,25 @@
         android:scaleType="fitCenter"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_toRightOf="@+id/breakAppsListTitle"
 
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="255dp"
         android:background="@android:color/transparent"
         android:onClick="pullAppList"
-        android:src="@drawable/plus" />
+        android:src="@drawable/plus"
+        android:layout_alignTop="@+id/breakAppsList"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ListView
         android:id="@+id/breakAppsList"
         android:layout_width="250dp"
         android:layout_height="200dp"
+        android:textColor="@color/whiteFull"
         android:layout_below="@+id/breakAppsListTitle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:textColor="@color/whiteFull">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/removeApp"
+        android:layout_toStartOf="@+id/removeApp"
+        android:layout_alignParentBottom="true">
 
 
     </ListView>
@@ -85,12 +88,12 @@
         android:scaleType="fitCenter"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_below="@id/studyTimeText"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="320dp"
         android:background="@android:color/transparent"
         android:onClick="removeAppList"
-        android:src="@drawable/minus" />
+        android:src="@drawable/minus"
+        android:layout_below="@+id/addApp"
+        android:layout_alignLeft="@+id/addApp"
+        android:layout_alignStart="@+id/addApp" />
 
     <TextView
         android:id="@+id/breakTimeTitleText"
@@ -113,13 +116,12 @@
         android:text="Current App Suggestions"
         android:textSize="20dp"
         android:gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-
 
 
         android:textColor="@color/whiteFull"
-        />
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageButton
         android:id="@+id/plusBreak"
@@ -131,7 +133,8 @@
         android:layout_below="@id/breakTimeTitleText"
         android:background="@android:color/transparent"
         android:onClick="incrementBreakTime"
-        android:src="@drawable/plus" />
+        android:src="@drawable/plus"
+        android:longClickable="false" />
     <TextView
         android:id="@+id/breakTimeText"
         android:layout_width="48dp"
