@@ -260,7 +260,7 @@ public class SettingsActivity extends Activity {
     }
 
     public void removeAppList(View v){
-        AppListManager.getInstance().removeAppList(v, this);
+        AppListManager.getInstance().removeAppList(v, this, currentApps, appListAdapter);
         currentApps.clear();
         currentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
         appListAdapter.notifyDataSetChanged();

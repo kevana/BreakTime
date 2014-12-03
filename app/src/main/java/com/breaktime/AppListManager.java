@@ -171,8 +171,10 @@ public class AppListManager {
 
     }
 
-    public void removeAppList(View v, Context context) {
+    public void removeAppList(View v, Context context, ArrayList<String> currentApps, AppArrayAdapter appListAdapter) {
         this.currentContext = context;
+        final ArrayList<String> fCurrentApps = currentApps;
+        final AppArrayAdapter fAppListAdapter = appListAdapter;
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
         String[] items = activities.toArray(new String[activities.size()]);
@@ -220,6 +222,12 @@ public class AppListManager {
                                         activities.remove(checkedItem.toString());
                                         ed.putStringSet(PrefID.ACTIVITIES, activities);
                                         ed.commit();
+
+                                        // Update the settings list
+                                        fCurrentApps.clear();
+                                        fCurrentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
+                                        fAppListAdapter.notifyDataSetChanged();
+
                                         dialog.dismiss();
                                     }
                                 });
