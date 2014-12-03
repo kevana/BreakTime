@@ -1,27 +1,26 @@
 package com.breaktime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.pm.ApplicationInfo;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.content.Intent;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class SettingsActivity extends Activity {
@@ -254,7 +253,7 @@ public class SettingsActivity extends Activity {
     }
 
     public void pullAppList(View v){
-        AppListManager.getInstance().pullAppList(v, getPackageManager(), this);
+        AppListManager.getInstance().pullAppList(v, getPackageManager(), this, currentApps, appListAdapter);
         currentApps.clear();
         currentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
         appListAdapter.notifyDataSetChanged();
