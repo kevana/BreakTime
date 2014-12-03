@@ -28,7 +28,8 @@
         android:text="@string/home_activity_help"
         android:drawableLeft="@android:drawable/ic_dialog_info"
         android:drawableStart="@android:drawable/ic_dialog_info"
-        android:drawablePadding="10dip" />
+        android:drawablePadding="10dip"
+        android:onClick="gettingStarted" />
 
     <ImageButton
         android:id="@+id/studyButton"

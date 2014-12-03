@@ -118,4 +118,9 @@ public class HomeActivity extends Activity {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
+
+    public void gettingStarted(View view) {
+        Intent intent = new Intent(this, GettingStartedActivity.class);
+        startActivity(intent);
+    }
 }
