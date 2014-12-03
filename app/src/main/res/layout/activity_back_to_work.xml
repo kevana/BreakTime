@@ -12,37 +12,49 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="176dp"
         android:text="@string/activity_back_to_work_title"
         android:textColor="@color/whiteFull"
-        android:textSize="28sp"/>
+        android:textSize="28sp"
+        android:layout_marginBottom="95dp"
+        android:layout_above="@+id/studyLabel"
+        android:layout_centerHorizontal="true" />
 
     <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/studyButton"
+        android:layout_width="72sp"
+        android:layout_height="72sp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="127dp"
-        android:layout_toLeftOf="@+id/textView"
-        android:layout_toStartOf="@+id/textView"
+        android:layout_marginBottom="127sp"
         android:onClick="startStudying"
-        android:src="@android:drawable/ic_input_get"
+        android:src="@drawable/book_stack"
         android:contentDescription="Back to work"
-        />
+        android:layout_marginLeft="60sp"
+        android:layout_alignParentLeft="true" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/textView"
-        android:src="@android:drawable/ic_popup_reminder"
-        android:layout_alignTop="@+id/imageButton"
-        android:layout_toRightOf="@+id/textView"
+        android:id="@+id/snoozeButton"
+        android:layout_width="72sp"
+        android:layout_height="72sp"
+        android:src="@drawable/sleep"
         android:contentDescription="Snooze Button"
         android:onClick="snooze"
-        />
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="127sp"
+        android:layout_marginRight="60sp"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:id="@+id/studyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Keep\nStudying"
+        android:textColor="@color/whiteFull"
+        android:textSize="18sp"
+        android:layout_alignTop="@+id/snoozeLabel"
+        android:layout_alignRight="@+id/studyButton"
+        android:layout_alignEnd="@+id/studyButton" />
 
     <ImageButton
         android:id="@+id/imageButton3"
@@ -54,5 +66,17 @@
         android:scaleType="fitCenter"
         android:onClick="openSettings"
         android:src="@drawable/settings48" />
+
+    <TextView
+        android:id="@+id/snoozeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Snooze\nfor 5 mins"
+        android:textColor="@color/whiteFull"
+        android:textSize="18sp"
+        android:layout_above="@+id/snoozeButton"
+        android:layout_alignLeft="@+id/snoozeButton"
+        android:layout_alignStart="@+id/snoozeButton"
+        android:layout_marginBottom="22dp" />
 
 </RelativeLayout>
