@@ -50,13 +50,20 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         String[] items = activities.toArray(new String[activities.size()]);
         Random rand = new Random();
         int max = items.length - 1;
-        int first = rand.nextInt((max - min) + 1) + min;
-        int second = rand.nextInt((max - min) + 1) + min;
-        while (second == first){
-            second = rand.nextInt((max - min) + 1) + min;
+        int first = -1;
+        if(max > 0){
+            first = rand.nextInt((max - min) + 1) + min;
+            final_items.add(items[first]);
         }
-        final_items.add(items[first]);
-        final_items.add(items[second]);
+        if(max > 1) {
+            int second = rand.nextInt((max - min) + 1) + min;
+            while (second == first) {
+                second = rand.nextInt((max - min) + 1) + min;
+            }
+            final_items.add(items[second]);
+        }
+
+
         for (String item : static_items){
             final_items.add(item);
         }
