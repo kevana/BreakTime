@@ -49,7 +49,7 @@ public class BackToWorkActivity extends Activity {
         if(!leavingByButtonPush
                 && ScreenReceiver.wasScreenOn
                 && !BreakTimerService.serviceRunning) {
-            View current = getWindow().getDecorView().findViewById(R.id.imageButton2);
+            View current = getWindow().getDecorView().findViewById(R.id.snoozeButton);
             Toast.makeText(getApplicationContext(), current.getContentDescription(),
                     Toast.LENGTH_SHORT).show();
             startService(new Intent(this, BreakTimerService.class));

@@ -12,16 +12,14 @@
     <string name="title_activity_choose_break">ChooseBreakActivity</string>
     <string name="activity_choose_break_list_message">Choose a Break Activity</string>
     <string name="title_activity_back_to_work">BackToWorkActivity</string>
-    <string name="activity_back_to_work_title">Back to Work</string>
+    <string name="activity_back_to_work_title">Time to get back to work!</string>
 
-    <string-array name="activity_choose_break_options_array">
-
-    </string-array>
-
+    <string-array name="activity_choose_break_options_array"></string-array>
     <string-array name="activity_choose_break_static">
         <item>Do my own thing</item>
         <item>Skip this break</item>
     </string-array>
 
+    <string name="title_activity_getting_started">GettingStartedActivity</string>
 
 </resources>

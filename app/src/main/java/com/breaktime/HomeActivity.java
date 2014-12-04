@@ -77,12 +77,15 @@ public class HomeActivity extends Activity {
 
             // Redo all intents for saved activities (super hacky whatever)
             Set<String> activity_names_and_packages = settings.getStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, null);
-            for (String appNamePack : activity_names_and_packages){
-                String[] parts = appNamePack.split(";");
-                if(activities_names.contains(parts[0])){
-                    //Contains app name, add intent
-                    Intent tempIntent = getPackageManager().getLaunchIntentForPackage(parts[1]);
-                    intents.put(parts[0], tempIntent);
+
+            if (activity_names_and_packages != null) {
+                for (String appNamePack : activity_names_and_packages){
+                    String[] parts = appNamePack.split(";");
+                    if(activities_names.contains(parts[0])){
+                        //Contains app name, add intent
+                        Intent tempIntent = getPackageManager().getLaunchIntentForPackage(parts[1]);
+                        intents.put(parts[0], tempIntent);
+                    }
                 }
             }
             // Create home intent
@@ -113,6 +116,11 @@ public class HomeActivity extends Activity {
 
     public void openSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void gettingStarted(View view) {
+        Intent intent = new Intent(this, GettingStartedActivity.class);
         startActivity(intent);
     }
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -39,17 +40,19 @@ public class AppListManager {
 
     }
 
-    public void pullAppList(View v, PackageManager pm, Context context){
+    public void pullAppList(View v, PackageManager pm, Context context, ArrayList<String> currentApps, AppArrayAdapter appListAdapter) {
         // get apps in phone
 //        final PackageManager pm = getPackageManager();
         final String TAG = "AppTest";
+        final ArrayList<String> fCurrentApps = currentApps;
+        final AppArrayAdapter fAppListAdapter = appListAdapter;
         this.currentContext = context;
         this.currentPM = pm;
         settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-        List<String> appNamesAndPackage = new ArrayList<String>();;
+        List<String> appNamesAndPackage = new ArrayList<String>();
 
-        if(settings.getStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, null) == null){
+        if (settings.getStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, null) == null) {
             List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
             Collections.sort(packages, new ApplicationInfoComparator(pm));
             List<Integer> icons = new ArrayList<Integer>();
@@ -59,7 +62,7 @@ public class AppListManager {
             Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
             // Add all apps to list
             for (ApplicationInfo packageInfo : packages) {
-                if (packageInfo.icon > 0 &&  pm.getLaunchIntentForPackage(packageInfo.packageName) != null && !activities.contains(packageInfo.packageName)) {
+                if (packageInfo.icon > 0 && pm.getLaunchIntentForPackage(packageInfo.packageName) != null && !activities.contains(packageInfo.packageName)) {
                     Log.d(TAG, "Installed package :" + packageInfo.packageName);
                     Log.d(TAG, "Icon : " + packageInfo.icon);
                     Log.d(TAG, "Name : " + packageInfo.loadLabel(pm));
@@ -77,13 +80,13 @@ public class AppListManager {
             SharedPreferences.Editor ed = settings.edit();
             ed.putStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, itemSet);
             ed.commit();
-        }else{
+        } else {
             appNamesAndPackage.addAll(settings.getStringSet(PrefID.INSTALLED_APPS_WITH_PACKAGE, null));
         }
         Collections.sort(appNamesAndPackage);
         ArrayList<String> appName = new ArrayList<String>();
         final ArrayList<String> appPackage = new ArrayList<String>();
-        for(String appNamePack : appNamesAndPackage){
+        for (String appNamePack : appNamesAndPackage) {
             String[] parts = appNamePack.split(";");
             appName.add(parts[0]);
             appPackage.add(parts[1]);
@@ -112,13 +115,13 @@ public class AppListManager {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         AlertDialog.Builder builderInner = new AlertDialog.Builder(
-                               currentContext);
+                                currentContext);
                         // Get Choice
-                        ListView lw = ((AlertDialog)dialog).getListView();
+                        ListView lw = ((AlertDialog) dialog).getListView();
                         final Object checkedItem = lw.getAdapter().getItem(which);
                         final Intent
-                            itemIntent = currentPM.getLaunchIntentForPackage(appPackage.get(which));
-                            Log.d(TAG, "Intent : " + itemIntent.toString());
+                                itemIntent = currentPM.getLaunchIntentForPackage(appPackage.get(which));
+                        Log.d(TAG, "Intent : " + itemIntent.toString());
                         //launches.get(which);
 
                         // Give message
@@ -139,6 +142,12 @@ public class AppListManager {
                                         activities.add(checkedItem.toString());
                                         ed.putStringSet(PrefID.ACTIVITIES, activities);
                                         ed.commit();
+
+                                        // Update the settings list
+                                        fCurrentApps.clear();
+                                        fCurrentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
+                                        fAppListAdapter.notifyDataSetChanged();
+
                                         // Add intent to global list
                                         Globals g = Globals.getInstance();
                                         HashMap<String, Intent> intents = g.getData();
@@ -162,8 +171,10 @@ public class AppListManager {
 
     }
 
-    public void removeAppList(View v, Context context) {
+    public void removeAppList(View v, Context context, ArrayList<String> currentApps, AppArrayAdapter appListAdapter) {
         this.currentContext = context;
+        final ArrayList<String> fCurrentApps = currentApps;
+        final AppArrayAdapter fAppListAdapter = appListAdapter;
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> activities = settings.getStringSet(PrefID.ACTIVITIES, null);
         String[] items = activities.toArray(new String[activities.size()]);
@@ -191,7 +202,7 @@ public class AppListManager {
                         AlertDialog.Builder builderInner = new AlertDialog.Builder(
                                 currentContext);
                         // Get Choice
-                        ListView lw = ((AlertDialog)dialog).getListView();
+                        ListView lw = ((AlertDialog) dialog).getListView();
                         final Object checkedItem = lw.getAdapter().getItem(which);
                         // Give message
                         builderInner.setTitle("You have removed the activity");
@@ -211,6 +222,12 @@ public class AppListManager {
                                         activities.remove(checkedItem.toString());
                                         ed.putStringSet(PrefID.ACTIVITIES, activities);
                                         ed.commit();
+
+                                        // Update the settings list
+                                        fCurrentApps.clear();
+                                        fCurrentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
+                                        fAppListAdapter.notifyDataSetChanged();
+
                                         dialog.dismiss();
                                     }
                                 });
@@ -225,18 +242,22 @@ public class AppListManager {
         alertDialog.show();
     }
 
-    public class ApplicationInfoComparator implements Comparator<ApplicationInfo>{
+    public class ApplicationInfoComparator implements Comparator<ApplicationInfo> {
 
         private PackageManager pm;
 
-        public  ApplicationInfoComparator(PackageManager packageManager){
+        public ApplicationInfoComparator(PackageManager packageManager) {
             pm = packageManager;
 
         }
 
         @Override
         public int compare(ApplicationInfo lhs, ApplicationInfo rhs) {
-            return (lhs.loadLabel(pm).toString()).compareTo(rhs.loadLabel(pm).toString());
+            try {
+                return (lhs.loadLabel(pm).toString()).compareTo(rhs.loadLabel(pm).toString());
+            } catch (Resources.NotFoundException e) {
+                return 0;
+            }
         }
     }
 

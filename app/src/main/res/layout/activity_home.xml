@@ -25,12 +25,14 @@
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
-        android:drawableLeft="@android:drawable/ic_menu_help"
-        android:drawableStart="@android:drawable/ic_menu_help"
-        android:text="@string/home_activity_help" />
+        android:text="@string/home_activity_help"
+        android:drawableLeft="@android:drawable/ic_dialog_info"
+        android:drawableStart="@android:drawable/ic_dialog_info"
+        android:drawablePadding="10dip"
+        android:onClick="gettingStarted" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/studyButton"
         android:layout_width="62dp"
         android:layout_height="62dp"
         android:layout_alignParentBottom="true"

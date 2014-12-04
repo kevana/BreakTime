@@ -106,7 +106,10 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
     }
 
     public void pullAppList(View view){
-        AppListManager.getInstance().pullAppList(view, getPackageManager(), this);
+        ArrayList<String> currentApps = new ArrayList<String>();
+        currentApps.addAll(settings.getStringSet(PrefID.ACTIVITIES, null));
 
+        AppArrayAdapter appListAdapter = new AppArrayAdapter(this, currentApps);
+        AppListManager.getInstance().pullAppList(view, getPackageManager(), this, currentApps, appListAdapter);
     }
 }

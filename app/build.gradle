@@ -22,8 +22,8 @@ android {
         applicationId 'com.breaktime'
         minSdkVersion 16
         targetSdkVersion 20
-        versionCode 7
-        versionName '0.7'
+        versionCode 9
+        versionName '0.9'
     }
     buildTypes {
         release {
@@ -38,6 +38,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.1.0@aar') {
         transitive = true;
     }
 }
