@@ -52,6 +52,7 @@
         android:text="Keep\nStudying"
         android:textColor="@color/whiteFull"
         android:textSize="18sp"
+        android:gravity="center"
         android:layout_alignTop="@+id/snoozeLabel"
         android:layout_alignRight="@+id/studyButton"
         android:layout_alignEnd="@+id/studyButton" />
@@ -74,6 +75,7 @@
         android:text="Snooze\nfor 5 mins"
         android:textColor="@color/whiteFull"
         android:textSize="18sp"
+        android:gravity="center"
         android:layout_above="@+id/snoozeButton"
         android:layout_alignLeft="@+id/snoozeButton"
         android:layout_alignStart="@+id/snoozeButton"

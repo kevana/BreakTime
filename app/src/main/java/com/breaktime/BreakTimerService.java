@@ -133,9 +133,12 @@ public class BreakTimerService extends Service {
 
     public class BreakTimer extends CountDownTimer {
 
+        final int TICK_MOD = 3;
+
+
         public BreakTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-            long seconds = millisInFuture / 1000;
+            super(millisInFuture * 3, countDownInterval);
+            long seconds = millisInFuture / (1000 * TICK_MOD);
             chatHeadText.setText(String.format("%d", seconds));
         }
 
@@ -144,7 +147,7 @@ public class BreakTimerService extends Service {
             Log.v("BreakTimerService", "BreakTimer Ticked");
             remainingMillis = millisUntilFinished;
             // TODO: convert to minutes after testing
-            long seconds = millisUntilFinished / 1000;
+            long seconds = millisUntilFinished / (1000 * TICK_MOD);
             chatHeadText.setText(String.format("%d", seconds));
         }
 

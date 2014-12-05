@@ -5,10 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.breaktime.screen.ScreenReceiver;
@@ -35,6 +38,11 @@ public class BackToWorkActivity extends Activity {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {1300L, 200L,100L, 200L,100L, 200L};
         vibrator.vibrate(pattern, 0);
+
+        SharedPreferences settings = PreferenceManager.
+                getDefaultSharedPreferences(getApplicationContext());
+        TextView label = (TextView) findViewById(R.id.snoozeLabel);
+        label.setText("Snooze\nfor "+(settings.getLong(PrefID.BREAK_TIME, 5000) / 1000)+" minutes");
     }
 
     @Override
