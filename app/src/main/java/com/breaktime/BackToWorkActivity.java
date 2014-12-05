@@ -42,7 +42,7 @@ public class BackToWorkActivity extends Activity {
         SharedPreferences settings = PreferenceManager.
                 getDefaultSharedPreferences(getApplicationContext());
         TextView label = (TextView) findViewById(R.id.snoozeLabel);
-        label.setText("Snooze\nfor "+(settings.getLong(PrefID.BREAK_TIME, 5000) / 1000)+" minutes");
+        label.setText("Snooze for\n"+(settings.getLong(PrefID.BREAK_TIME, 5000) / 1000)+" minutes");
     }
 
     @Override
