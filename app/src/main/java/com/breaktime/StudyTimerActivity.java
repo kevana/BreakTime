@@ -17,6 +17,12 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -34,6 +40,8 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
     private PowerManager.WakeLock wl;
     private boolean timerRunning;
     private SharedPreferences settings;
+
+    private FaceUpTimer faceUpTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,9 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        faceUpTimer = new FaceUpTimer(3000, 1000);
+        faceUpTimer.start();
     }
 
     @Override
@@ -78,8 +89,11 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
             studyTimer.cleanup();
             FlashController.flash(500);
             Log.v("StudyTimerActivity", "StudyTimer Cancelled");
+            faceUpTimer = new FaceUpTimer(3000,1000);
+            faceUpTimer.start();
         } else if (distance < 1.0 && !timerRunning && hasWindowFocus()) {
             // Start timer
+            faceUpTimer.cancel();
             studyTimer = new StudyTimer(remainingMillis, 1000);
             vibrator.vibrate(new long[]{100L, 250L, 300L, 350L}, -1);
             FlashController.flash(200);
@@ -104,6 +118,12 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
                 audioManager.setRingerMode(originalAudioLevel);
 //            }
 //        }, 2000);
+        if(settings.getLong(PrefID.STUDY_TIME_REMAINING, -1) < 0){
+            remainingMillis = settings.getLong(PrefID.STUDY_TIME, 30000);
+            long seconds = remainingMillis / 1000;
+            timerTextView.setText(String.format("%d", seconds));
+        }
+
     }
 
     @Override
@@ -128,6 +148,59 @@ public class StudyTimerActivity extends Activity implements SensorEventListener 
 
         studyTimer.onFinish();
 
+    }
+
+    private class FaceUpTimer extends CountDownTimer {
+
+        public FaceUpTimer(long millisInFuture, long countDownInterval){
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            //meh
+        }
+
+        @Override
+        public void onFinish() {
+            //Make the directions image and text flash.
+//            Log.d("FaceUpTimer", "Finished, animation should be going");
+//            AnimationSet animation = new AnimationSet(false); //change to false
+//            AnimationSet animation2 = new AnimationSet(false); //change to false
+//
+//                Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+////                fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+//                fadeIn.setStartOffset(200);
+//                fadeIn.setDuration(200);
+//
+//                Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
+////                fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+//                fadeOut.setStartOffset(0);
+//                fadeOut.setDuration(200);
+//
+//            Animation fadeWait = new AlphaAnimation(1.0f, 1.0f);
+////            fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+//            fadeOut.setStartOffset(400);
+//            fadeOut.setDuration(1000);
+//
+//                animation.addAnimation(fadeOut);
+//                animation.addAnimation(fadeIn);
+//
+//                animation.setRepeatCount(Animation.INFINITE);
+//
+//                animation2.addAnimation(fadeOut);
+//                animation2.addAnimation(fadeIn);
+//
+//                animation2.setRepeatCount(Animation.INFINITE);
+//
+//
+//            //Get the image and textview
+//            TextView textView = (TextView) findViewById(R.id.flipToStartText);
+//            ImageView imageView = (ImageView) findViewById(R.id.flipDiagram);
+//            textView.startAnimation(animation);
+//            imageView.startAnimation(animation2);
+
+        }
     }
 
     private class StudyTimer extends CountDownTimer {
