@@ -49,16 +49,16 @@ public class ChooseBreakActivity extends Activity implements AdapterView.OnItemC
         List<String> final_items = new ArrayList<String>();
         String[] items = activities.toArray(new String[activities.size()]);
         Random rand = new Random();
-        int max = items.length - 1;
+        int max = items.length;
         int first = -1;
         if(max > 0){
-            first = rand.nextInt((max - min) + 1) + min;
+            first = rand.nextInt(max - min) + min;
             final_items.add(items[first]);
         }
         if(max > 1) {
-            int second = rand.nextInt((max - min) + 1) + min;
+            int second = rand.nextInt(max - min) + min;
             while (second == first) {
-                second = rand.nextInt((max - min) + 1) + min;
+                second = rand.nextInt(max - min) + min;
             }
             final_items.add(items[second]);
         }
