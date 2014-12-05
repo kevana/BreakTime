@@ -37,6 +37,7 @@
         android:layout_height="72sp"
         android:src="@drawable/sleep"
         android:contentDescription="Snooze Button"
+        android:onClick="snooze"
         android:layout_alignParentEnd="false"
         android:layout_alignParentStart="false"
         android:layout_alignParentBottom="true"
